@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "keywords": [
     "time",
+    "periodo",
     "open refine",
     "linked data",
     "reconciliation"
