@@ -1,0 +1,21 @@
+{
+  "name": "periodo-reconciler",
+  "version": "1.0.0",
+  "description": "Open Refine reconciliation service against the PeriodO time period gazetteer",
+  "main": "src/index.js",
+  "keywords": [
+    "time",
+    "open refine",
+    "linked data",
+    "reconciliation"
+  ],
+  "scripts": {
+    "update_dataset": "wget http://n2t.net/ark:/99152/p0d.json",
+    "start": "node ./"
+  },
+  "author": "Patrick Golden",
+  "dependencies": {
+    "body": "^5.1.0",
+    "lunr": "^0.7.1"
+  }
+}
