@@ -3,11 +3,10 @@
 const http = require('http')
     , url = require('url')
     , formBody = require('body/form')
-    , { METADATA } = require('./consts')
-    , search = require('./search')
+    , { METADATA, PORT } = require('../src/consts')
+    , search = require('../src/search')
+    , format = require('../src/format_preview')
 
-
-const PORT = 8142;
 
 const server = http.createServer((req, res) => {
   try {
@@ -17,6 +16,16 @@ const server = http.createServer((req, res) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/javascript');
       res.write(`${callback}(${JSON.stringify(METADATA, true, '  ')})`);
+      res.end('\n');
+      return;
+    }
+
+    if (req.url.startsWith('/preview-')) {
+      const periodID = req.url.replace('/preview-', '')
+
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      res.write(`<!doctype html><html><body bgcolor="white">${format(periodID)}`);
       res.end('\n');
       return;
     }

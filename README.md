@@ -2,6 +2,8 @@
 
 
 # Starting
+Requires Node 6+
+
 ```
 npm install
 npm update_dataset

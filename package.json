@@ -12,11 +12,14 @@
   ],
   "scripts": {
     "update_dataset": "wget http://n2t.net/ark:/99152/p0d.json",
-    "start": "node ./"
+    "start": "nodemon ./bin/serve.js"
   },
   "author": "Patrick Golden",
   "dependencies": {
     "body": "^5.1.0",
-    "lunr": "^0.7.1"
+    "immutable": "^3.8.1",
+    "lodash.foreach": "^4.5.0",
+    "lunr": "^0.7.1",
+    "periodo-utils": "^4.1.0"
   }
 }
