@@ -15,12 +15,14 @@ const index = lunr(function () {
 
   this.field('suffix', { boost: 1 });
   this.field('numbering', { boost: 1 });
+
+  this.field('location', { boost: 10 });
 })
 
 forEach(periods, period => {
   index.add(Object.assign({
     id: period.id,
-  }, tokenize(period.label)))
+  }, tokenize(period.label), {location: period.spatialCoverageDescription} ))
 });
 
 function formatName(period) {
@@ -35,8 +37,16 @@ function formatName(period) {
   return formatted
 }
 
-module.exports = function search({ query, limit }) {
-  const results = index.search(query).slice(0, limit)
+function location(properties) {
+  return properties
+    ? properties.reduce(
+      (loc, prop) => prop['pid'] === 'location' ? loc + ' ' + prop['v'] : loc,
+      '')
+    : ''
+}
+
+module.exports = function search({ query, properties, limit }) {
+  const results = index.search(query + location(properties)).slice(0, limit)
 
   return results.map(({ ref, score }) => {
     const period = periods[ref]
