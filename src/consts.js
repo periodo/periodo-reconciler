@@ -11,7 +11,7 @@ const DEFAULT_TYPE = {
 
 const PROPERTIES =
   [ {id: 'location', name: 'Spatial coverage'}
-  , {id: 'start', name: 'Start year'}
+  , {id: 'start', name: 'Year or start year'}
   , {id: 'stop', name: 'End year'}
   ]
 
