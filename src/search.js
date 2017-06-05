@@ -3,7 +3,6 @@
 const fromPairs = require('lodash.frompairs')
     , values = require('lodash.values')
     , intersection = require('lodash.intersection')
-    , union = require('lodash.union')
     , label = require('./label')
     , spatial = require('./spatial')
     , temporal = require('./temporal')
