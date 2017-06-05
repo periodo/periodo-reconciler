@@ -57,7 +57,7 @@ const intervalOf = period => period.start.in && period.stop.in
       parseInt(period.start.in.year || period.start.in.earliestYear, 10),
       parseInt(period.stop.in.year || period.stop.in.latestYear, 10)
     )
-  : Interval.InvalidInterval()
+  : Interval.InvalidInterval
 
 module.exports = {
   index: docs => {

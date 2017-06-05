@@ -7,7 +7,7 @@ test('intervals can be proper or not', t => {
   const proper = Interval.Interval(2,3)
   const improper = Interval.Interval(2,2)
   const backward = Interval.Interval(3,2)
-  const invalid = Interval.InvalidInterval()
+  const invalid = Interval.InvalidInterval
   t.plan(4)
   t.true(proper.isProper())
   t.false(improper.isProper())
@@ -24,7 +24,7 @@ test('valid intervals have lengths', t => {
 
 test('invalid intervals do not have lengths', t => {
   t.plan(1)
-  t.equal(Interval.InvalidInterval().length(), undefined)
+  t.equal(Interval.InvalidInterval.length(), undefined)
 })
 
 test('proper intervals contain points', t => {
@@ -56,7 +56,7 @@ test('improper intervals contain points', t => {
 })
 
 test('invalid intervals contain nothing', t => {
-  const interval = Interval.InvalidInterval()
+  const interval = Interval.InvalidInterval
   t.plan(5)
   t.false(interval.contains(2))
   t.false(interval.contains(3))
@@ -102,7 +102,7 @@ test('improper intervals may overlap', t => {
 })
 
 test('invalid intervals overlap nothing', t => {
-  const interval = Interval.InvalidInterval()
+  const interval = Interval.InvalidInterval
   t.plan(1)
   t.equal(interval.overlaps(interval), 0)
 })

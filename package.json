@@ -35,7 +35,7 @@
     "lodash.values": "^4.3.0",
     "micro-route": "^2.4.0",
     "periodo-utils": "^4.2.0",
-    "union-type": "^0.3.3",
+    "union-type": "^0.4.0",
     "urlencoded-body-parser": "^2.0.1"
   },
   "devDependencies": {
