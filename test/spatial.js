@@ -37,3 +37,44 @@ test('sanity test 3', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
+test('should match all tokens in spatial coverage', t=> {
+  const docs = [
+    { id: 'unranked'
+    , spatialCoverage: 'Iraq'
+    },
+    { id: 'rank0'
+    , spatialCoverage: 'Iraq, Iran'
+    }
+  ]
+  const results = label.index(docs).search('Iraq and Iran')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('should ignore `and`', t=> {
+  const docs = [
+    { id: 'unranked'
+    , spatialCoverageDescription: 'Iraq'
+    },
+    { id: 'rank0'
+    , spatialCoverageDescription: 'Iraq and Iran'
+    }
+  ]
+  const results = label.index(docs).search('Iraq and Iran')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('should ignore `or`', t=> {
+  const docs = [
+    { id: 'unranked'
+    , spatialCoverageDescription: 'Iraq'
+    },
+    { id: 'rank0'
+    , spatialCoverageDescription: 'Iraq and Iran'
+    }
+  ]
+  const results = label.index(docs).search('Iraq or Iran')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})

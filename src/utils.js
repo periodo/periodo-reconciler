@@ -3,6 +3,7 @@
 const uniq = require('lodash.uniq')
     , fromPairs = require('lodash.frompairs')
     , flatten = require('lodash.flatten')
+    , elasticlunr = require('elasticlunr')
 
 // assumes no duplicate refs
 const scoringToObject = scoring => fromPairs(
@@ -34,4 +35,13 @@ const pairwisePreferences = (scorings, weights, choices) => {
   )
 }
 
-module.exports = { pairwisePreferences }
+const stopwords = words => {
+  const words_has = fromPairs(words.map(x => [x, true]))
+      , filter = token => words_has[token] ? undefined : token
+      , filterName = words.join('|')
+  delete elasticlunr.Pipeline.registeredFunctions[filterName]
+  elasticlunr.Pipeline.registerFunction(filter, filterName)
+  return filter
+}
+
+module.exports = { pairwisePreferences, stopwords }

@@ -1,8 +1,9 @@
 "use strict";
 
 const TextIndex = require('elasticlunr')
+    , { stopwords } = require('./utils')
 
-TextIndex.tokenizer.setSeperator(/[\s\-,]+/)
+TextIndex.tokenizer.setSeperator(/[\s\-,:]+/)
 
 module.exports = {
   index: docs => {
@@ -10,13 +11,14 @@ module.exports = {
       this.addField('spatialCoverage')
       this.addField('spatialCoverageDescription')
       this.pipeline.reset()
+      this.pipeline.add(stopwords(['and', 'or']))
     })
     docs.forEach(doc => index.addDoc(doc))
 
     return { search: query => index.search(query,
       { fields:
-        { spatialCoverage: {boost: 1}
-        , spatialCoverageDescription: {boost: 1}
+        { spatialCoverage: {boost: 1, bool: 'AND'}
+        , spatialCoverageDescription: {boost: 1, bool: 'AND'}
         }
       }) }
   }

@@ -22,26 +22,28 @@ const labelIndex = label.index(_periods)
     , spatialIndex = spatial.index(_periods)
     , temporalIndex = temporal.index(_periods)
 
-const refs = results => results.map(({ref}) => ref)
-
 module.exports = function search({ query, properties, limit }) {
+
+  const results = [ labelIndex.search(query) ]
+      , weights = [ WEIGHTS.label ]
+
   const { location, start, stop } = parseProperties(properties)
 
-  const labelResults = labelIndex.search(query)
-      , spatialResults = spatialIndex.search(location)
-      , temporalResults = temporalIndex.search(start, stop)
+  if (location) {
+    results.push(spatialIndex.search(location))
+    weights.push(WEIGHTS.spatial)
+  }
+
+  if (start) {
+    results.push(temporalIndex.search(start, stop))
+    weights.push(WEIGHTS.temporal)
+  }
 
   const choices = intersection(
-    ...[ labelResults, spatialResults, temporalResults ]
-      .filter(results => results.length > 0)
-      .map(refs)
+    ...results.map(results => results.map(({ref}) => ref))
   ).sort()
 
-  const ranking = schulze(
-    [ labelResults, spatialResults, temporalResults ],
-    [ WEIGHTS.label, WEIGHTS.spatial, WEIGHTS.temporal ],
-    choices
-  )
+  const ranking = schulze(results, weights, choices)
 
   return ranking.slice(0, limit)
     .map((ref, index) => (
