@@ -6,11 +6,11 @@ TextIndex.tokenizer.setSeperator(/[\s\-,]+/)
 
 module.exports = {
   index: docs => {
-    const index = TextIndex()
-    index.addField('label')
-    index.addField('localizedLabels')
-    index.pipeline.reset()
-
+    const index = TextIndex(function() {
+      this.addField('label')
+      this.addField('localizedLabels')
+      this.pipeline.reset()
+    })
     docs.forEach(doc => index.addDoc(doc))
 
     return { search: query => index.search(query,
