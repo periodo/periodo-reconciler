@@ -170,7 +170,7 @@ test('GET /suggest/properties returns suggestions', t => {
       t.equal(res.body.status, '200 OK')
       t.same(res.body.result,
         [ {id: 'location', name: 'Spatial coverage'}
-        , {id: 'start', name: 'Start year'}
+        , {id: 'start', name: 'Year or start year'}
         , {id: 'stop', name: 'End year'}
         ]
       )
@@ -192,7 +192,7 @@ test('GET /suggest/properties?callback=foo returns suggests via JSONP', t => {
         t.equal(json.status, '200 OK')
         t.same(json.result,
           [ {id: 'location', name: 'Spatial coverage'}
-          , {id: 'start', name: 'Start year'}
+          , {id: 'start', name: 'Year or start year'}
           , {id: 'stop', name: 'End year'}
           ]
         )
