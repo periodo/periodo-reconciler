@@ -1,16 +1,38 @@
 const forEach = require('lodash.foreach')
+    , values = require('lodash.values')
     , dataset = require('../p0d.json')
     , periods = {}
     , sources = {}
 
+forEach(dataset.periodCollections, collection => {
+  sources[collection.id] = collection.source
+  sources[collection.id].numDefinitions = (
+    Object.keys(collection.definitions).length
+  )
 
-forEach(dataset.periodCollections, authority => {
-  sources[authority.id] = authority.source;
-  authority.source.numDefinitions = Object.keys(authority.definitions).length
+  forEach(collection.definitions, period => {
+    period.id = dataset['@context']['@base'] + period.id
+    period.sourceID = collection.id
 
-  forEach(authority.definitions, period => {
-    period.sourceID = authority.id;
-    periods[period.id] = period;
+    const localizedLabels = [].concat(...values(period.localizedLabels))
+      .filter(label => label != period.label)
+      .join(', ')
+    if (localizedLabels.length > 0) {
+      period.localizedLabels = localizedLabels
+    } else {
+      delete period.localizedLabels
+    }
+
+    const spatialCoverage = [].concat(...values(period.spatialCoverage))
+      .map(place => place.label)
+      .join(', ')
+    if (spatialCoverage.length > 0) {
+      period.spatialCoverage = spatialCoverage
+    } else {
+      delete period.spatialCoverage
+    }
+
+    periods[period.id] = period
   })
 })
 

@@ -2,7 +2,7 @@
   "name": "periodo-reconciler",
   "version": "1.1.0",
   "description": "Open Refine reconciliation service against the PeriodO time period gazetteer",
-  "main": "src/index.js",
+  "main": "bin/serve.js",
   "keywords": [
     "time",
     "periodo",
@@ -12,14 +12,37 @@
   ],
   "scripts": {
     "update_dataset": "wget http://n2t.net/ark:/99152/p0d.json",
+    "test": "tape test/*.js | faucet",
     "start": "nodemon ./bin/serve.js"
   },
-  "author": "Patrick Golden",
+  "contributors": [
+    "Patrick Golden <ptgolden@email.unc.edu> (http://ptgolden.org)",
+    "Ryan Shaw <ryanshaw@unc.edu> (https://aeshin.org)"
+  ],
   "dependencies": {
-    "body": "^5.1.0",
+    "elasticlunr": "^0.9.5",
+    "floyd-warshall": "^1.0.0",
     "immutable": "^3.8.1",
+    "lodash.flatten": "^4.4.0",
     "lodash.foreach": "^4.5.0",
-    "lunr": "^0.7.1",
-    "periodo-utils": "^4.1.0"
+    "lodash.frompairs": "^4.0.1",
+    "lodash.intersection": "^4.4.0",
+    "lodash.invert": "^4.3.0",
+    "lodash.map": "^4.6.0",
+    "lodash.sortby": "^4.7.0",
+    "lodash.union": "^4.6.0",
+    "lodash.uniq": "^4.5.0",
+    "lodash.values": "^4.3.0",
+    "micro-route": "^2.4.0",
+    "periodo-utils": "^4.2.0",
+    "union-type": "^0.3.3",
+    "urlencoded-body-parser": "^2.0.1"
+  },
+  "devDependencies": {
+    "faucet": "0.0.1",
+    "node-wget": "^0.4.2",
+    "nodemon": "^1.11.0",
+    "supertest": "^3.0.0",
+    "tape": "^4.6.3"
   }
 }

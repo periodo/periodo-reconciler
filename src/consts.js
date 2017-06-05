@@ -1,25 +1,49 @@
 "use strict";
 
-const HOSTNAME = 'http://localhost:8142'
-
 const PORT = 8142
 
-const PERIOD_TYPE = {
-  id: '/period',
-  name: 'PeriodO Time Period',
+const ROOT = `http://localhost:${PORT}`
+
+const DEFAULT_TYPE = {
+  id: 'http://www.w3.org/2004/02/skos/core#Concept',
+  name: 'Period definition',
 }
 
+const PROPERTIES =
+  [ {id: 'location', name: 'Spatial coverage'}
+  , {id: 'start', name: 'Start year'}
+  , {id: 'stop', name: 'End year'}
+  ]
+
 const METADATA = {
-  name: 'Periodo reconciliation service',
-  defaultTypes: { period: PERIOD_TYPE },
-  view: {
-    url: "http://n2t.net/ark:/99152/{{id}}"
-  },
+  name: 'PeriodO reconciliation service',
+  identifierSpace: 'https://www.ietf.org/rfc/rfc3986.txt',
+  schemaSpace: 'https://www.ietf.org/rfc/rfc3986.txt',
+  defaultTypes: [DEFAULT_TYPE],
+  view: {url: '{{id}}'},
   preview: {
-    width: 420,
-    height: 420,
-    url: HOSTNAME + '/preview-{{id}}'
+    width: 480,
+    height: 480,
+    url: ROOT + '/preview?id={{id}}'
+  },
+  suggest: {
+    property: {
+      service_url: ROOT,
+      service_path: '/suggest/properties'
+    }
   }
 }
 
-module.exports = { HOSTNAME, PORT, PERIOD_TYPE, METADATA }
+const WEIGHTS =
+  { label: 1
+  , spatial: 1
+  , temporal: 1
+  }
+
+module.exports =
+  { PORT
+  , DEFAULT_TYPE
+  , PROPERTIES
+  , METADATA
+  , WEIGHTS
+  }

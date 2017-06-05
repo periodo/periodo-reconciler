@@ -1,62 +1,57 @@
 "use strict";
 
-const lunr = require('lunr')
-    , forEach = require('lodash.foreach')
-    , tokenize = require('./tokenize')
-    , { PERIOD_TYPE } = require('./consts')
+const fromPairs = require('lodash.frompairs')
+    , values = require('lodash.values')
+    , intersection = require('lodash.intersection')
+    , union = require('lodash.union')
+    , label = require('./label')
+    , spatial = require('./spatial')
+    , temporal = require('./temporal')
+    , schulze = require('./schulze')
+    , format = require('./format')
     , { periods } = require('./data')
+    , { DEFAULT_TYPE, WEIGHTS } = require('./consts')
 
 
-const index = lunr(function () {
-  this.field('originalLabel', { boost: 10 });
-  this.field('label', { boost: 12 });
+const parseProperties = properties => properties
+  ? fromPairs(properties.map(({p, pid, v}) => [p || pid, v]))
+  : {}
 
-  this.field('phase', { boost: 4 });
+const _periods = values(periods)
 
-  this.field('suffix', { boost: 1 });
-  this.field('numbering', { boost: 1 });
+const labelIndex = label.index(_periods)
+    , spatialIndex = spatial.index(_periods)
+    , temporalIndex = temporal.index(_periods)
 
-  this.field('location', { boost: 10 });
-})
-
-forEach(periods, period => {
-  index.add(Object.assign({
-    id: period.id,
-  }, tokenize(period.label), {location: period.spatialCoverageDescription} ))
-});
-
-function formatName(period) {
-  const { label, spatialCoverageDescription } = period
-
-  let formatted = label
-
-  if (spatialCoverageDescription) {
-    formatted += ` [${spatialCoverageDescription}]`
-  }
-
-  return formatted
-}
-
-function location(properties) {
-  return properties
-    ? properties.reduce(
-      (loc, prop) => prop['pid'] === 'location' ? loc + ' ' + prop['v'] : loc,
-      '')
-    : ''
-}
+const refs = results => results.map(({ref}) => ref)
 
 module.exports = function search({ query, properties, limit }) {
-  const results = index.search(query + location(properties)).slice(0, limit)
+  const { location, start, stop } = parseProperties(properties)
 
-  return results.map(({ ref, score }) => {
-    const period = periods[ref]
+  const labelResults = labelIndex.search(query)
+      , spatialResults = spatialIndex.search(location)
+      , temporalResults = temporalIndex.search(start, stop)
 
-    return {
-      score,
-      id: period.id,
-      name: formatName(period),
-      type: [PERIOD_TYPE],
-      match: false,
-    }
-  })
+  const choices = intersection(
+    ...[ labelResults, spatialResults, temporalResults ]
+      .filter(results => results.length > 0)
+      .map(refs)
+  ).sort()
+
+  const ranking = schulze(
+    [ labelResults, spatialResults, temporalResults ],
+    [ WEIGHTS.label, WEIGHTS.spatial, WEIGHTS.temporal ],
+    choices
+  )
+
+  return ranking.slice(0, limit)
+    .map((ref, index) => (
+        { id: ref
+        , name: format(periods[ref])
+        , type: [DEFAULT_TYPE]
+        , score: ranking.length - index
+        , match: ranking.length === 1
+        }
+      )
+    )
 }

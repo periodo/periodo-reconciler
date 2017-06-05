@@ -1,5 +1,14 @@
 # Open Refine reconciliation service for PeriodO data
 
+Used for reconciliation:
+
+* skos:prefLabel
+* skos:altLabel
+* time:intervalStartedBy
+* time:intervalFinishedBy
+* periodo:spatialCoverageDescription
+* dcterms:spatial
+
 
 # Starting
 Requires Node 6+
