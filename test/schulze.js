@@ -20,7 +20,7 @@ test('wikipedia example', t => {
     , ['e', 'b', 'a', 'd', 'c']
     ]),
     [5, 5, 8, 3, 7, 2, 7, 8]
-  ), ['e', 'a', 'c', 'b', 'd'])
+  ).map(({ref}) => ref), ['e', 'a', 'c', 'b', 'd'])
 })
 
 test('tennessee example', t => {
@@ -32,7 +32,7 @@ test('tennessee example', t => {
     , ['Knoxville', 'Chattanooga', 'Nashville', 'Memphis']
     ]),
     [42, 26, 15, 17]
-  ), ['Nashville', 'Chattanooga', 'Knoxville', 'Memphis'])
+  ).map(({ref}) => ref), ['Nashville', 'Chattanooga', 'Knoxville', 'Memphis'])
 })
 
 test('empty scorings have no effect', t => {
@@ -42,5 +42,5 @@ test('empty scorings have no effect', t => {
     , []
     , []
     ])
-  ), ['Memphis', 'Nashville', 'Chattanooga', 'Knoxville'])
+  ).map(({ref}) => ref), ['Memphis', 'Nashville', 'Chattanooga', 'Knoxville'])
 })

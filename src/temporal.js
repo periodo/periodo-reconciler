@@ -8,9 +8,9 @@ const Query = Type({PointQuery: [Number], IntervalQuery: [Interval]})
 
 const score = Query.caseOn({
   PointQuery: (q, interval) => interval.contains(q) ? 1.0 : 0.0,
-  IntervalQuery: (q, interval) => (
-    (2.0 * interval.overlaps(q)) / (q.length() + interval.length())
-  )
+  IntervalQuery: (q, interval) => q.length() > 0
+      ? (2.0 * interval.overlaps(q)) / (q.length() + interval.length())
+      : interval.contains(q.t1) ? 1.0 : 0.0
 })
 
 class IntervalIndex {
@@ -37,7 +37,6 @@ class IntervalIndex {
       : isNaN(stop)
           ? this._search(Query.PointQuery(_start))
           : this._search(Query.IntervalQuery(Interval.Interval(_start, _stop)))
-
   }
 
   _search(query) {

@@ -26,7 +26,7 @@ test('can limit results', t => {
     [ { id: 'http://n2t.net/ark:/99152/p083p5rr7tg'
       , match: false
       , name: 'Akkadian [Mesopotamia, -2349 to -2149]'
-      , score: 6
+      , score: 0
       , type: [ { id: 'http://www.w3.org/2004/02/skos/core#Concept'
                 , name: 'Period definition' } ]
       }

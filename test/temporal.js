@@ -33,6 +33,16 @@ test('point query', t => {
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
+test('point query disguised as interval', t => {
+  const docs = [
+    {id: 'rank0', start: {in: {year: 1}}, stop: {in: {year: 3}}},
+    {id: 'unranked', start: {in: {year: 3}}, stop: {in: {year: 5}}}
+  ]
+  const results = index(docs).search(2, 2)
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
 test('interval query', t => {
   const docs = [
     {id: 'unranked', start: {in: {year: 1}}, stop: {in: {year: 5}}},

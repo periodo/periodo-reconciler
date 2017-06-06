@@ -1,18 +1,18 @@
 "use strict";
 
 const test = require('tape')
-    , { pairwisePreferences } = require('../src/utils')
+    , { pairwisePreferences, scoresToRanks } = require('../src/utils')
 
-const orderings2scorings = orderings => orderings.map(
+const orderingsToScorings = orderings => orderings.map(
   ordering => ordering.map((ref, i) => ({ref, score: ordering.length - i})))
 
 test('weights default to 1', t => {
-  const [choices, matrix] = pairwisePreferences(
+  const [choices, matrix, scores] = pairwisePreferences(
     [ [{ref: 'a', score: 2}, {ref: 'b', score: 1}]
     , [{ref: 'b', score: 2}, {ref: 'a', score: 1}]
     ]
   )
-  t.plan(2)
+  t.plan(3)
   t.same(choices, ['a', 'b'])
   t.same(matrix,
     // a  b
@@ -20,6 +20,7 @@ test('weights default to 1', t => {
     , [1, 0] // b
     ]
   )
+  t.same(scores, {a: 0.5, b: 0.5})
 })
 
 test('# of weights must match # of scorings', t => {
@@ -32,7 +33,7 @@ test('# of weights must match # of scorings', t => {
 
 // https://en.wikipedia.org/w/index.php?title=Schulze_method&oldid=783347638
 test('wikipedia example', t => {
-  const [choices, matrix] = pairwisePreferences(orderings2scorings(
+  const [choices, matrix] = pairwisePreferences(orderingsToScorings(
     [ ['a', 'c', 'b', 'e', 'd'] // voter 1
     , ['a', 'd', 'e', 'c', 'b'] // voter 2
     , ['b', 'e', 'd', 'a', 'c'] // voter 3
@@ -58,7 +59,7 @@ test('wikipedia example', t => {
 })
 
 test('tennessee example', t => {
-  const [choices, matrix] = pairwisePreferences(orderings2scorings(
+  const [choices, matrix] = pairwisePreferences(orderingsToScorings(
     [ ['Memphis', 'Nashville', 'Chattanooga', 'Knoxville']
     , ['Nashville', 'Chattanooga', 'Knoxville', 'Memphis']
     , ['Chattanooga', 'Knoxville', 'Nashville', 'Memphis']
@@ -79,7 +80,7 @@ test('tennessee example', t => {
 })
 
 test('can limit choices', t => {
-  const [choices, matrix] = pairwisePreferences(orderings2scorings(
+  const [choices, matrix, scores] = pairwisePreferences(orderingsToScorings(
     [ ['Memphis', 'Nashville', 'Chattanooga', 'Knoxville']
     , ['Nashville', 'Chattanooga', 'Knoxville', 'Memphis']
     , ['Chattanooga', 'Knoxville', 'Nashville', 'Memphis']
@@ -88,12 +89,29 @@ test('can limit choices', t => {
     [42, 26, 15, 17],
     ['Memphis', 'Nashville']
   )
-  t.plan(2)
+  t.plan(3)
   t.same(choices, ['Memphis', 'Nashville'])
   t.same(matrix,
     // Me  Na
     [ [ 0, 42] // Me
     , [58,  0] // Na
     ]
+  )
+  t.same(scores, {Memphis: 0.5800000000000001, Nashville: 0.42})
+})
+
+test('scores to ranks', t => {
+  t.plan(3)
+  t.same(
+    scoresToRanks({foo: 0.7, bar: 1.1}),
+    {foo: 1, bar: 0}
+  )
+  t.same(
+    scoresToRanks({foo: 0.7, bar: 0.7, biz: 0.1}),
+    {foo: 0, bar: 0, biz: 2}
+  )
+  t.same(
+    scoresToRanks({foo: 0.7, bar: 0.7, biz: 1.1}),
+    {foo: 1, bar: 1, biz: 0}
   )
 })

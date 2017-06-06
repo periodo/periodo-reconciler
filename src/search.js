@@ -46,11 +46,11 @@ module.exports = function search({ query, properties, limit }) {
   const ranking = schulze(results, weights, choices)
 
   return ranking.slice(0, limit)
-    .map((ref, index) => (
+    .map(({ref, score}) => (
         { id: ref
         , name: format(periods[ref])
         , type: [DEFAULT_TYPE]
-        , score: ranking.length - index
+        , score
         , match: ranking.length === 1
         }
       )
