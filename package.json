@@ -6,7 +6,8 @@
     "type": "git",
     "url": "https://github.com/periodo/periodo-reconciler.git"
   },
-  "main": "bin/serve.js",
+  "main": "src/server.js",
+  "bin": "bin/serve.js",
   "keywords": [
     "time",
     "periodo",
