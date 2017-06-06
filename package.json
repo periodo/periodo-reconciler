@@ -1,7 +1,7 @@
 {
   "name": "periodo-reconciler",
   "version": "2.0.0",
-  "description": "Open Refine reconciliation service for PeriodO",
+  "description": "Open Refine reconciliation service for PeriodO data",
   "repository": {
     "type": "git",
     "url": "https://github.com/periodo/periodo-reconciler.git"
