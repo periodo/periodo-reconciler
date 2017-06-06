@@ -1,6 +1,7 @@
 "use strict";
 
-const uniq = require('lodash.uniq')
+const { readFileSync } = require('fs')
+    , uniq = require('lodash.uniq')
     , toPairs = require('lodash.topairs')
     , fromPairs = require('lodash.frompairs')
     , flatten = require('lodash.flatten')
@@ -82,4 +83,6 @@ const stopwords = words => {
   return filter
 }
 
-module.exports = { pairwisePreferences, stopwords, scoresToRanks }
+const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
+
+module.exports = { pairwisePreferences, stopwords, scoresToRanks, loadJSON }

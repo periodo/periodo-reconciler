@@ -20,7 +20,7 @@
     "pretest": "npm -s run lint",
     "test": "tape test/*.js | faucet",
     "prepublish": "npm -s run test",
-    "start": "nodemon ./bin/serve.js"
+    "start": "nodemon ./bin/serve.js p0d.json"
   },
   "contributors": [
     "Patrick Golden <ptgolden@email.unc.edu> (http://ptgolden.org)",

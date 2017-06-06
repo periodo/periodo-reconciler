@@ -1,39 +1,44 @@
 const forEach = require('lodash.foreach')
     , values = require('lodash.values')
-    , dataset = require('../p0d.json')
-    , periods = {}
-    , sources = {}
+    , { loadJSON } = require('./utils')
 
-forEach(dataset.periodCollections, collection => {
-  sources[collection.id] = collection.source
-  sources[collection.id].numDefinitions = (
-    Object.keys(collection.definitions).length
-  )
+const load = path => {
+  const dataset = loadJSON(path)
+      , sources = {}
+      , periods = {}
 
-  forEach(collection.definitions, period => {
-    period.id = dataset['@context']['@base'] + period.id
-    period.sourceID = collection.id
+  forEach(dataset.periodCollections, collection => {
+    sources[collection.id] = collection.source
+    sources[collection.id].numDefinitions = (
+      Object.keys(collection.definitions).length
+    )
 
-    const localizedLabels = [].concat(...values(period.localizedLabels))
-      .filter(label => label != period.label)
-      .join(', ')
-    if (localizedLabels.length > 0) {
-      period.localizedLabels = localizedLabels
-    } else {
-      delete period.localizedLabels
-    }
+    forEach(collection.definitions, period => {
+      period.id = dataset['@context']['@base'] + period.id
+      period.sourceID = collection.id
 
-    const spatialCoverage = [].concat(...values(period.spatialCoverage))
-      .map(place => place.label)
-      .join(', ')
-    if (spatialCoverage.length > 0) {
-      period.spatialCoverage = spatialCoverage
-    } else {
-      delete period.spatialCoverage
-    }
+      const localizedLabels = [].concat(...values(period.localizedLabels))
+        .filter(label => label != period.label)
+        .join(', ')
+      if (localizedLabels.length > 0) {
+        period.localizedLabels = localizedLabels
+      } else {
+        delete period.localizedLabels
+      }
 
-    periods[period.id] = period
+      const spatialCoverage = [].concat(...values(period.spatialCoverage))
+        .map(place => place.label)
+        .join(', ')
+      if (spatialCoverage.length > 0) {
+        period.spatialCoverage = spatialCoverage
+      } else {
+        delete period.spatialCoverage
+      }
+
+      periods[period.id] = period
+    })
   })
-})
+  return {sources, periods}
+}
 
-module.exports = { periods, sources }
+module.exports = { load }

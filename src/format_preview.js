@@ -2,9 +2,8 @@ const Immutable = require('immutable')
     , { getDisplayTitle } = require('periodo-utils').items.source
     , { getEarliestYear
       , getLatestYear } = require('periodo-utils').items.terminus
-    , { periods, sources } = require('./data')
 
-module.exports = function format(periodID) {
+module.exports = function format(periodID, periods, sources) {
   const period = Immutable.fromJS(periods[periodID])
       , source = Immutable.fromJS(sources[period.get('sourceID')])
 
