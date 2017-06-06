@@ -2,7 +2,8 @@
 
 /* eslint-disable no-console */
 
-const { PORT } = require('../src/consts')
+const { resolve } = require('path')
+    , { PORT } = require('../src/consts')
     , data = require('../src/data')
     , server = require('../src/server')
 
@@ -13,8 +14,11 @@ if (args.length !== 1) {
   process.exit(1)
 }
 
+console.log(
+  `Reconciling against %s`, resolve(args[0])
+)
 server(data.load(args[0])).listen(PORT)
 
 console.log(
-  'PeriodO reconciliation server running on http://localhost:%d', PORT
+  'Reconciliation server running on http://localhost:%d', PORT
 )
