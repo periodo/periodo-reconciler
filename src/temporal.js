@@ -1,7 +1,6 @@
 "use strict";
 
 const Type = require('union-type')
-    , sortBy = require('lodash.sortby')
     , Interval = require('./interval')
 
 const Query = Type({PointQuery: [Number], IntervalQuery: [Interval]})

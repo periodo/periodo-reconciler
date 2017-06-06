@@ -4,14 +4,6 @@ const Immutable = require('immutable')
       , getLatestYear } = require('periodo-utils').items.terminus
     , { periods, sources } = require('./data')
 
-
-const spatialCoverage = p => p.has('spatialCoverage')
-  ? p.get('spatialCoverage')
-      .map(o => o.get('label'))
-      .filter(label => label != p.get('spatialCoverageDescription'))
-      .join(', ')
-  : ''
-
 module.exports = function format(periodID) {
   const period = Immutable.fromJS(periods[periodID])
       , source = Immutable.fromJS(sources[period.get('sourceID')])

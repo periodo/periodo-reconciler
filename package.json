@@ -29,7 +29,6 @@
     "lodash.intersection": "^4.4.0",
     "lodash.invert": "^4.3.0",
     "lodash.map": "^4.6.0",
-    "lodash.sortby": "^4.7.0",
     "lodash.mapvalues": "^4.6.0",
     "lodash.mergewith": "^4.6.0",
     "lodash.topairs": "^4.3.0",
