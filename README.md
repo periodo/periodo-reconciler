@@ -1,4 +1,4 @@
-# Open Refine reconciliation service for PeriodO data
+## Open Refine reconciliation service for PeriodO data
 
 Before you begin, make sure [Node.js](https://nodejs.org) and [OpenRefine](http://openrefine.org/) are installed on your machine.
 
@@ -42,3 +42,25 @@ The commands below must be typed into a terminal window.
 0. Under where it says **Also use relevant details from other columns** you can optionally choose columns that have location names, start years, or end years for further constraining your reconciliation queries. For example, if you had place names in a column named `Place`, you would click the checkbox next to **Place** and also enter the text `Spatial coverage` in the (autocompleting) text input next to the checkbox.
 
 0. Click **Start Reconciling**.
+
+## How reconciliation works
+
+To reconcile a period term against PeriodO data, one needs
+
+0. the period term, e.g. `Late Cypriot III`,
+0. (optionally) a place name, e.g. `Cyprus`, and
+0. (optionally) a single number denoting a Gregorian calendar year, e.g. `-1200`, or a pair of such numbers delimiting an interval, e.g. `-1200` to `-1050`.
+
+Each of these pieces of data (if provided) is then reconciled against the appropriate fields of PeriodO period definitions. Each reconciliation (terminological, spatial, and temporal) produces a ranked list of matching periods. These ranked lists are then combined by taking their intersection, and combining the rankings using the [Schulze method](https://en.wikipedia.org/wiki/Schulze_method).
+
+### Matching period terms against periods' labels
+
+The period term is matched against the [preferred and alternate labels](http://perio.do/technical-overview/#labels-and-documentation) of each period definition. If there are multiple tokens in the term (e.g. `Late Cypriot III` has three tokens), *all* of the tokens must match (i.e. it is a Boolean `AND` query). Period definitions with matches in the preferred label are ranked higher than ones with matches in the alternate labels.
+
+### Matching place names against periods' spatial coverages
+
+The place name (if provided) is matched against the [spatial coverage description and linked spatial entity labels](http://perio.do/technical-overview/#spatial-extent) of each period definition. If there are multiple tokens in the place name, *all* of the tokens must match (i.e. it is a Boolean `AND` query).
+
+### Matching years or year ranges again periods' temporal extents
+
+The year or year range (if provided) is matched again the [temporal extent](http://perio.do/technical-overview/#temporal-extent) of each period definition. Single years match if they fall within the widest temporal extent for the period, while year ranges match to the extent that they overlap with the widest temporal extent for the period.
