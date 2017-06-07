@@ -2,11 +2,8 @@
 
 const { readFileSync } = require('fs')
     , uniq = require('lodash.uniq')
-    , toPairs = require('lodash.topairs')
     , fromPairs = require('lodash.frompairs')
     , flatten = require('lodash.flatten')
-    , mergeWith = require('lodash.mergewith')
-    , mapValues = require('lodash.mapvalues')
     , elasticlunr = require('elasticlunr')
 
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
@@ -15,37 +12,6 @@ const scoringToScores = choices => scoring => fromPairs(scoring
   .filter(({ref}) => choices.indexOf(ref) >= 0)
   .map(({ref, score}) => [ref, score])
 )
-
-const scoresToRanks = scores => fromPairs(toPairs(scores)
-  .sort((a, b) => b[1] - a[1])
-  .reduce((ranks, [ref, score], i, scoring) => {
-    ranks.push([ref,
-      i === 0
-        ? 0
-        : score < scoring[i - 1][1]
-          ? i
-          : ranks[i - 1][1]
-    ])
-    return ranks
-  }, [])
-)
-
-const applyWeight = (o, weight) => mapValues(o, score => score * weight)
-
-const weightedMeanRanks = (scores, weights) => mergeWith(
-  {},
-  ...scores.map((s, i) => applyWeight(scoresToRanks(s), weights[i])),
-  (dest, src) => dest === undefined
-    ? src
-    : src === undefined
-      ? dest
-      : src + dest
-)
-
-const normalize = weights => {
-  const sum = weights.reduce((a, b) => a + b, 0)
-  return weights.map(w => w / sum)
-}
 
 const pairwisePreferences = (scorings, weights, choices) => {
   if (weights && weights.length !== scorings.length) {
@@ -69,7 +35,6 @@ const pairwisePreferences = (scorings, weights, choices) => {
   return (
     [ _choices
     , _choices.map(x => _choices.map(y => countPreferences(x, y)))
-    , weightedMeanRanks(_scores, normalize(_weights))
     ]
   )
 }
@@ -85,4 +50,4 @@ const stopwords = words => {
 
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
-module.exports = { pairwisePreferences, stopwords, scoresToRanks, loadJSON }
+module.exports = { pairwisePreferences, stopwords, loadJSON }
