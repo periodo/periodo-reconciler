@@ -31,7 +31,7 @@
   "dependencies": {
     "elasticlunr": "^0.9.5",
     "floyd-warshall": "^1.0.0",
-    "immutable": "^3.8.1",
+    "immutable": "^3.8.2",
     "lodash.flatten": "^4.4.0",
     "lodash.foreach": "^4.5.0",
     "lodash.frompairs": "^4.0.1",
@@ -40,17 +40,17 @@
     "lodash.map": "^4.6.0",
     "lodash.uniq": "^4.5.0",
     "lodash.values": "^4.3.0",
-    "micro-route": "^2.4.0",
+    "micro-route": "^2.5.0",
     "periodo-utils": "^4.2.0",
-    "union-type": "^0.4.0",
+    "union-type": "^0.4.1",
     "urlencoded-body-parser": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
     "faucet": "0.0.1",
     "node-wget": "^0.4.2",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.13.3",
     "supertest": "^3.0.0",
-    "tape": "^4.6.3"
+    "tape": "^4.8.0"
   }
 }
