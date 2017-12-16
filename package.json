@@ -20,7 +20,7 @@
     "lint": "eslint src bin test",
     "pretest": "npm -s run lint",
     "test": "tape test/*.js | faucet",
-    "prepublish": "npm -s run test",
+    "prepare": "npm -s run test",
     "start": "nodemon ./bin/serve.js p0d.json"
   },
   "contributors": [
