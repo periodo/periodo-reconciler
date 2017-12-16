@@ -9,21 +9,32 @@ module.exports = function format(periodID, periods, sources) {
 
   return `
     <style>
-      dl { font-family: sans-serif }
+      dl {
+        font-family: sans-serif;
+        font-size: 13px !important;
+        margin: 0.5em !important;
+      }
       dh { color: #93a1a1 }
-      dd { margin-bottom: 1em }
-      p { margin: 0.5em 0 }
+      dd {
+        margin-bottom: 1em !important;
+        margin-left: 1em !important;
+      }
+      p { margin: 0.5em 0; font-size: 13px !important; }
+      a { color: #4272db; text-decoration: none }
     </style>
     <dl>
       <dh>Period</dh>
       <dd>
-        <p>${period.get('label')}</p>
+        <p><a target="_blank" href="${periodID}">${period.get('label')}</a></p>
         <p><i>${period.get('localizedLabels', '')}</i></p>
       </dd>
 
       <dh>Source</dh>
       <dd>
-        <p>${getDisplayTitle(source)}</p>
+        <p>
+          <a target="_blank"
+             href="${periodID.slice(0, -4)}">${getDisplayTitle(source)}</a>
+        </p>
         <p>
           <i>contains ${source.get('numDefinitions')} period definitions</i>
         </p>

@@ -22,14 +22,19 @@ const METADATA = {
   defaultTypes: [DEFAULT_TYPE],
   view: {url: '{{id}}'},
   preview: {
-    width: 480,
-    height: 480,
+    width: 380,
+    height: 390,
     url: ROOT + '/preview?id={{id}}'
   },
   suggest: {
     property: {
       service_url: ROOT,
       service_path: '/suggest/properties'
+    },
+    entity: {
+      service_url: ROOT,
+      service_path: '/suggest/entities',
+      flyout_service_path: '/preview?flyout=true&id=${id}'
     }
   }
 }

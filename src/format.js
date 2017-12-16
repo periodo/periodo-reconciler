@@ -25,4 +25,3 @@ module.exports = period => {
 
   return formatted
 }
-

@@ -53,7 +53,8 @@ const parseQueries = queries => {
 
 const root = route('/', ['GET', 'POST'])
 const preview = route('/preview', 'GET')
-const suggest = route('/suggest/properties', 'GET')
+const suggestProperties = route('/suggest/properties', 'GET')
+const suggestEntities = route('/suggest/entities', 'GET')
 
 module.exports = ({periods, sources}) => {
 
@@ -78,17 +79,27 @@ module.exports = ({periods, sources}) => {
     }
   }
 
-  const previewHandler = ({id}, res) => {
+  const previewHandler = ({id, flyout, callback}, res) => {
     if (id && id in periods) {
-      sendHTML(`<!doctype html><html><body bgcolor="white">
-        ${format(id, periods, sources)}`, res)
+      const html = format(id, periods, sources)
+      if (flyout) {
+        sendJSON(callback, {html}, res)
+      } else {
+        sendHTML(`<!doctype html><html><body bgcolor="white">${html}`, res)
+      }
     } else {
       sendError(404, `'${id}' is not a period definition URI`, res)
     }
   }
 
-  const suggestHandler = ({callback}, res) => {
+  const suggestPropertiesHandler = ({callback}, res) => {
     const json = {code: '/api/status/ok', status: '200 OK', result: PROPERTIES}
+    sendJSON(callback, json, res)
+  }
+
+  const suggestEntitiesHandler = ({prefix, callback}, res) => {
+    const result = index.search({query: prefix})
+    const json = {code: '/api/status/ok', status: '200 OK', result}
     sendJSON(callback, json, res)
   }
 
@@ -102,8 +113,11 @@ module.exports = ({periods, sources}) => {
       } else if (preview(req)) {
         previewHandler(params, res)
 
-      } else if (suggest(req)) {
-        suggestHandler(params, res)
+      } else if (suggestProperties(req)) {
+        suggestPropertiesHandler(params, res)
+
+      } else if (suggestEntities(req)) {
+        suggestEntitiesHandler(params, res)
       }
     })
   })
