@@ -1,11 +1,9 @@
 "use strict";
 
 const test = require('tape')
-    , data = require('../src/data')
     , reconcile = require('../src/reconcile')
 
-
-const { periods } = data.load('test/data/p0d.json')
+const { periods } = require('./load_data')()
     , index = reconcile.against(periods)
 
 test('must match on all properties specified', t => {

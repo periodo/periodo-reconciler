@@ -2,11 +2,10 @@
 
 const test = require('tape')
     , request = require('supertest')
-    , data = require('../src/data')
     , server = require('../src/server')
     , { METADATA } = require('../src/consts')
 
-const serve = server(data.load('test/data/p0d.json'))
+const serve = server(require('./load_data')())
 
 test('GET / returns service metadata', t => {
   request(serve)
