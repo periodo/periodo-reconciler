@@ -1,7 +1,7 @@
 "use strict";
 
 const TextIndex = require('elasticlunr')
-    , { filterCombiningCharacters, stopwords } = require('./utils')
+    , { convertRomanNumerals, filterCombiningCharacters, stopwords } = require('./utils')
 
 TextIndex.tokenizer.setSeperator(/[\s\-,:]+/)
 
@@ -13,6 +13,7 @@ module.exports = {
       this.pipeline.reset()
       this.pipeline.add(stopwords(['period']))
       this.pipeline.add(filterCombiningCharacters)
+      this.pipeline.add(convertRomanNumerals)
     })
     docs.forEach(doc => index.addDoc(doc))
 
