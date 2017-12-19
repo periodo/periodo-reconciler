@@ -165,3 +165,12 @@ test('should ignore `period`', t=> {
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
+
+test('should search decomposed unicode with combining characters removed', t => {
+  const docs = [
+    {id: 'rank0', label: 'Dông Son'},
+  ]
+  const results = label.index(docs).search('Dong Son')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})

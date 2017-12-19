@@ -5,6 +5,7 @@ const { readFileSync } = require('fs')
     , fromPairs = require('lodash.frompairs')
     , flatten = require('lodash.flatten')
     , elasticlunr = require('elasticlunr')
+    , unorm = require('unorm')
 
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
 // scores: {foo: 0.7, bar: 1.1}
@@ -48,6 +49,15 @@ const stopwords = words => {
   return filter
 }
 
+// http://www.unicode.org/charts/PDF/U0300.pdf
+const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/
+
+function filterCombiningCharacters(token) {
+  return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')
+}
+
+elasticlunr.Pipeline.registerFunction(filterCombiningCharacters, 'filterCombiningCharacters')
+
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
-module.exports = { pairwisePreferences, stopwords, loadJSON }
+module.exports = { pairwisePreferences, stopwords, loadJSON, filterCombiningCharacters }
