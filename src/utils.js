@@ -58,6 +58,39 @@ function filterCombiningCharacters(token) {
 
 elasticlunr.Pipeline.registerFunction(filterCombiningCharacters, 'filterCombiningCharacters')
 
+// "or at most 1-20 -- no one has phase numbering beyond 20" -- Adam
+const ROMAN_NUMERALS = [
+  '',
+  'i',
+  'ii',
+  'iii',
+  'iv',
+  'v',
+  'vi',
+  'vii',
+  'viii',
+  'ix',
+  'x',
+  'xi',
+  'xii',
+  'xiii',
+  'xiv',
+  'xv',
+  'xvi',
+  'xvii',
+  'xviii',
+  'xix',
+  'xx',
+]
+
+function convertRomanNumerals(token) {
+  const pos = ROMAN_NUMERALS.indexOf(token)
+
+  return pos > 0 ? pos : token
+}
+
+elasticlunr.Pipeline.registerFunction(convertRomanNumerals, 'convertRomanNumerals')
+
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
-module.exports = { pairwisePreferences, stopwords, loadJSON, filterCombiningCharacters }
+module.exports = { pairwisePreferences, stopwords, loadJSON, filterCombiningCharacters, convertRomanNumerals }

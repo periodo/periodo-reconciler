@@ -174,3 +174,12 @@ test('should search decomposed unicode with combining characters removed', t => 
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
+
+test('should understand Roman numerals as equivalent to Arabic numerals', t => {
+  const docs = [
+    {id: 'rank0', label: 'Bronze Age II'},
+  ]
+  const results = label.index(docs).search('Bronze Age 2')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
