@@ -63,7 +63,7 @@ const removeCharacters = characters => register(
 )
 
 // http://www.unicode.org/charts/PDF/U0300.pdf
-const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/
+const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/g
 
 function filterCombiningCharacters(token) {
   return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')

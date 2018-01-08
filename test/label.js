@@ -85,14 +85,14 @@ test('sanity test 6', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-// test('diacritics', t => {
-//   const docs = [
-//     {id: 'rank0', label: 'Förromersk järnålder'}
-//   ]
-//   const results = label.index(docs).search('forromersk jarnalder')
-//   t.plan(1)
-//   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
-// })
+test('diacritics', t => {
+  const docs = [
+    {id: 'rank0', label: 'Förromersk järnålder'}
+  ]
+  const results = label.index(docs).search('forromersk jarnalder')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
 
 test('greek', t => {
   const docs = [
