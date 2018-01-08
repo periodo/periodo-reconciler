@@ -47,10 +47,10 @@
     "urlencoded-body-parser": "^2.0.1"
   },
   "devDependencies": {
-    "eslint": "^3.19.0",
+    "eslint": "^4.15.0",
     "faucet": "0.0.1",
     "node-wget": "^0.4.2",
-    "nodemon": "^1.13.3",
+    "nodemon": "^1.14.9",
     "supertest": "^3.0.0",
     "tape": "^4.8.0"
   }
