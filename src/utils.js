@@ -53,13 +53,13 @@ const stopwords = words => {
     words.join('|'))
 }
 
-const SPECIAL_CHARS = '^$\.*+?()[]{}`'
+const SPECIAL_CHARS = '^$\\.*+?()[]{}`'
 
 const escape = c => SPECIAL_CHARS.includes(c) ? `\\${c}` : c
 
-const removeCharacters = characters => register(
-  token => token.replace(RegExp(`[${escape(characters)}]+`, 'g'), ''),
-  characters
+const removeCharacters = chars => register(
+  token => token.replace(RegExp(`[${chars.map(escape).join('')}]+`, 'g'), ''),
+  chars.join('')
 )
 
 // http://www.unicode.org/charts/PDF/U0300.pdf
