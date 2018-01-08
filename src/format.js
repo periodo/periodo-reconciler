@@ -8,20 +8,22 @@ const formatStop = stop => stop.in
   ? (stop.in.year || stop.in.latestYear || '')
   : 'unknown'
 
+const formatSpatialCoverage = period => {
+  const {spatialCoverage, spatialCoverageDescription} = period
+  const parts = []
+  if (spatialCoverageDescription) {
+    parts.push(spatialCoverageDescription)
+  }
+  if (spatialCoverage) {
+    parts.push(spatialCoverage)
+  }
+  return parts.join(', ')
+}
+
 const formatTemporalRange = period => (
   `${formatStart(period.start)} to ${formatStop(period.stop)}`
 )
 
-module.exports = period => {
-  const { label, spatialCoverageDescription } = period
-
-  let formatted = label + ' ['
-
-  if (spatialCoverageDescription) {
-    formatted += `${spatialCoverageDescription}, `
-  }
-
-  formatted += `${formatTemporalRange(period)}]`
-
-  return formatted
-}
+module.exports = p => (
+  `${p.label} [${formatSpatialCoverage(p)}: ${formatTemporalRange(p)}]`
+)
