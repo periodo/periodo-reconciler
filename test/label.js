@@ -48,11 +48,12 @@ test('sanity test 3', t => {
   const docs = [
     {id: 'rank1', label: 'Early Bronze Age'},
     {id: 'rank0', label: 'Early Bronze'},
-    {id: 'unranked', label: 'Bronze'}
+    {id: 'rank2', label: 'Bronze'},
+    {id: 'rank3', label: 'Early Curly'},
   ]
   const results = label.index(docs).search('Early Bronze')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2', 'rank3'])
 })
 
 test('sanity test 4', t => {
@@ -85,14 +86,14 @@ test('sanity test 6', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-// test('diacritics', t => {
-//   const docs = [
-//     {id: 'rank0', label: 'Förromersk järnålder'}
-//   ]
-//   const results = label.index(docs).search('forromersk jarnalder')
-//   t.plan(1)
-//   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
-// })
+test('diacritics', t => {
+  const docs = [
+    {id: 'rank0', label: 'Förromersk järnålder'}
+  ]
+  const results = label.index(docs).search('forromersk jarnalder')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
 
 test('greek', t => {
   const docs = [
@@ -134,36 +135,39 @@ test('weird LCSH syntax', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-test('should match all tokens in label', t=> {
+test('should match at least one token in label', t=> {
   const docs = [
-    {id: 'unranked0', label: 'Late Helladic'},
-    {id: 'unranked1', label: 'Late Cycladic'},
-    {id: 'rank0', label: 'Late Helladic IIIA'}
+    {id: 'rank1', label: 'Late Helladic'},
+    {id: 'rank2', label: 'Late Cycladic'},
+    {id: 'rank0', label: 'Late Helladic IIIA'},
+    {id: 'unranked', label: 'Early Cycladic'},
   ]
   const results = label.index(docs).search('Late Helladic IIIA')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0'])
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
 })
 
-test('should match all tokens in localized labels', t=> {
+test('should match at least one token in localized labels', t=> {
   const docs = [
-    {id: 'unranked0', localizedLabels: 'Late Helladic'},
-    {id: 'unranked1', localizedLabels: 'Late Cycladic'},
-    {id: 'rank0', localizedLabels: 'Late Helladic IIIA'}
+    {id: 'rank1', localizedLabels: 'Late Helladic'},
+    {id: 'rank2', localizedLabels: 'Late Cycladic'},
+    {id: 'rank0', localizedLabels: 'Late Helladic IIIA'},
+    {id: 'unranked', localizedLabels: 'Early Cycladic'},
   ]
   const results = label.index(docs).search('Late Helladic IIIA')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0'])
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
 })
 
 test('should ignore `period`', t=> {
   const docs = [
     {id: 'rank0', label: 'Late Helladic'},
-    {id: 'unranked', label: 'Late Cycladic'},
+    {id: 'rank1', label: 'Late Cycladic'},
+    {id: 'unranked', label: 'Cycladic Period'},
   ]
   const results = label.index(docs).search('Late Helladic Period')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0'])
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
 test('should search decomposed unicode with combining characters removed', t => {
@@ -180,6 +184,15 @@ test('should understand Roman numerals as equivalent to Arabic numerals', t => {
     {id: 'rank0', label: 'Bronze Age II'},
   ]
   const results = label.index(docs).search('Bronze Age 2')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('should ignore periods', t => {
+  const docs = [
+    {id: 'rank0', label: 'Athenian supremacy, 479-431 B.C'},
+  ]
+  const results = label.index(docs).search('Athenian supremacy, 479-431 B.C.')
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
