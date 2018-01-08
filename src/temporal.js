@@ -41,8 +41,15 @@ class IntervalIndex {
   _search(query) {
     const results = this.docs.reduce(
       (results, {id, interval}) => {
-        const s = score(query, interval)
-        return s > 0 ? results.concat([{ref: id, score: s}]) : results
+        let s = score(query, interval)
+        if (s > 0) {
+          return results.concat([{ref: id, score: s}])
+        }
+        // try again with a 100-year buffer for half the score
+        s = score(query, interval.expand(100)) / 2.0
+        return s > 0
+          ? results.concat([{ref: id, score: s}])
+          : results
       }, []
     )
     results.sort((a, b) => b.score - a.score)
