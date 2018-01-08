@@ -1,7 +1,9 @@
 "use strict";
 
 const TextIndex = require('elasticlunr')
-    , { convertRomanNumerals, filterCombiningCharacters, stopwords } = require('./utils')
+    , { convertRomanNumerals
+      , filterCombiningCharacters
+      , stopwords, removeCharacters } = require('./utils')
 
 TextIndex.tokenizer.setSeperator(/[\s\-,:]+/)
 
@@ -27,5 +29,3 @@ module.exports = {
     }
   }
 }
-
-
