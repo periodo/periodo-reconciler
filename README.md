@@ -55,12 +55,12 @@ Each of these pieces of data (if provided) is then reconciled against the approp
 
 ### Matching period terms against periods' labels
 
-The period term is matched against the [preferred and alternate labels](http://perio.do/technical-overview/#labels-and-documentation) of each period definition. If there are multiple tokens in the term (e.g. `Late Cypriot III` has three tokens), *all* of the tokens must match (i.e. it is a Boolean `AND` query). Period definitions with matches in the preferred label are ranked higher than ones with matches in the alternate labels.
+The period term is matched against the [preferred and alternate labels](http://perio.do/technical-overview/#labels-and-documentation) of each period definition. If there are multiple tokens in the term (e.g. `Late Cypriot III` has three tokens), *any* of the tokens can match (i.e. it is a Boolean `OR` query). Period definitions with matches in the preferred label are ranked higher than ones with matches in the alternate labels.
 
 ### Matching place names against periods' spatial coverages
 
-The place name (if provided) is matched against the [spatial coverage description and linked spatial entity labels](http://perio.do/technical-overview/#spatial-extent) of each period definition. If there are multiple tokens in the place name, *all* of the tokens must match (i.e. it is a Boolean `AND` query).
+The place name (if provided) is matched against the [spatial coverage description and linked spatial entity labels](http://perio.do/technical-overview/#spatial-extent) of each period definition. If there are multiple tokens in the place name, *any* of the tokens can match (i.e. it is a Boolean `OR` query).
 
 ### Matching years or year ranges again periods' temporal extents
 
-The year or year range (if provided) is matched again the [temporal extent](http://perio.do/technical-overview/#temporal-extent) of each period definition. Single years match if they fall within the widest temporal extent for the period, while year ranges match to the extent that they overlap with the widest temporal extent for the period.
+The year or year range (if provided) is matched again the [temporal extent](http://perio.do/technical-overview/#temporal-extent) of each period definition. Single years match if they fall within the widest temporal extent for the period, plus one century on either side. Year ranges match to the extent that they overlap with the widest temporal extent for the period, plus one century on either side.
