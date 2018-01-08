@@ -22,9 +22,10 @@ module.exports = {
 
     return { search: query => index.search(query,
       { fields:
-        { label: {boost: 2, bool: 'AND'}
-        , localizedLabels: {boost: 1, bool: 'AND'}
+        { label: {boost: 2}
+        , localizedLabels: {boost: 1}
         }
+      , bool: 'OR'
       })
     }
   }
