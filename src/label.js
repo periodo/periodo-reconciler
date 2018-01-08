@@ -14,6 +14,7 @@ module.exports = {
       this.pipeline.add(stopwords(['period']))
       this.pipeline.add(filterCombiningCharacters)
       this.pipeline.add(convertRomanNumerals)
+      this.pipeline.add(removeCharacters('.'))
     })
     docs.forEach(doc => index.addDoc(doc))
 

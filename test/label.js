@@ -183,3 +183,12 @@ test('should understand Roman numerals as equivalent to Arabic numerals', t => {
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
+
+test('should ignore periods', t => {
+  const docs = [
+    {id: 'rank0', label: 'Athenian supremacy, 479-431 B.C'},
+  ]
+  const results = label.index(docs).search('Athenian supremacy, 479-431 B.C.')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})

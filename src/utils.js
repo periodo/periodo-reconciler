@@ -7,6 +7,12 @@ const { readFileSync } = require('fs')
     , elasticlunr = require('elasticlunr')
     , unorm = require('unorm')
 
+const register = (f, name) => {
+  delete elasticlunr.Pipeline.registeredFunctions[name]
+  elasticlunr.Pipeline.registerFunction(f, name)
+  return f
+}
+
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
 // scores: {foo: 0.7, bar: 1.1}
 const scoringToScores = choices => scoring => fromPairs(scoring
@@ -42,12 +48,19 @@ const pairwisePreferences = (scorings, weights, choices) => {
 
 const stopwords = words => {
   const words_has = fromPairs(words.map(x => [x, true]))
-      , filter = token => words_has[token] ? undefined : token
-      , filterName = words.join('|')
-  delete elasticlunr.Pipeline.registeredFunctions[filterName]
-  elasticlunr.Pipeline.registerFunction(filter, filterName)
-  return filter
+  return register(
+    token => words_has[token] ? undefined : token,
+    words.join('|'))
 }
+
+const SPECIAL_CHARS = '^$\.*+?()[]{}`'
+
+const escape = c => SPECIAL_CHARS.includes(c) ? `\\${c}` : c
+
+const removeCharacters = characters => register(
+  token => token.replace(RegExp(`[${escape(characters)}]+`, 'g'), ''),
+  characters
+)
 
 // http://www.unicode.org/charts/PDF/U0300.pdf
 const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/
@@ -55,8 +68,7 @@ const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/
 function filterCombiningCharacters(token) {
   return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')
 }
-
-elasticlunr.Pipeline.registerFunction(filterCombiningCharacters, 'filterCombiningCharacters')
+register(filterCombiningCharacters, 'filterCombiningCharacters')
 
 // "or at most 1-20 -- no one has phase numbering beyond 20" -- Adam
 const ROMAN_NUMERALS = [
@@ -86,11 +98,16 @@ const ROMAN_NUMERALS = [
 function convertRomanNumerals(token) {
   const pos = ROMAN_NUMERALS.indexOf(token)
 
-  return pos > 0 ? pos : token
+  return pos > 0 ? ('' + pos) : token
 }
-
-elasticlunr.Pipeline.registerFunction(convertRomanNumerals, 'convertRomanNumerals')
+register(convertRomanNumerals, 'convertRomanNumerals')
 
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
-module.exports = { pairwisePreferences, stopwords, loadJSON, filterCombiningCharacters, convertRomanNumerals }
+module.exports = {
+  pairwisePreferences,
+  stopwords,
+  removeCharacters,
+  loadJSON,
+  filterCombiningCharacters,
+  convertRomanNumerals }
