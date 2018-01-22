@@ -95,12 +95,15 @@ const ROMAN_NUMERALS = [
   'xx',
 ]
 
-function convertRomanNumerals(token) {
-  const pos = ROMAN_NUMERALS.indexOf(token)
-
-  return pos > 0 ? ('' + pos) : token
+function convertToRomanNumerals(token) {
+  const int = parseInt(token, 10)
+  if (isNaN(int) || int < 1 || int > 20) {
+    return token
+  } else {
+    return ROMAN_NUMERALS[int]
+  }
 }
-register(convertRomanNumerals, 'convertRomanNumerals')
+register(convertToRomanNumerals, 'convertToRomanNumerals')
 
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
@@ -110,4 +113,4 @@ module.exports = {
   removeCharacters,
   loadJSON,
   filterCombiningCharacters,
-  convertRomanNumerals }
+  convertToRomanNumerals }

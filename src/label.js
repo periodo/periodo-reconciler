@@ -1,11 +1,11 @@
 "use strict";
 
 const TextIndex = require('elasticlunr')
-    , { convertRomanNumerals
+    , { convertToRomanNumerals
       , filterCombiningCharacters
       , stopwords, removeCharacters } = require('./utils')
 
-TextIndex.tokenizer.setSeperator(/[\s\-,:]+/)
+TextIndex.tokenizer.setSeperator(/[\s\-,:()]+|\d{3,}|[3-9]\d|2[1-9]/)
 
 module.exports = {
   index: docs => {
@@ -13,9 +13,9 @@ module.exports = {
       this.addField('label')
       this.addField('localizedLabels')
       this.pipeline.reset()
-      this.pipeline.add(stopwords(['period']))
+      this.pipeline.add(stopwords(['period', 'age']))
       this.pipeline.add(filterCombiningCharacters)
-      this.pipeline.add(convertRomanNumerals)
+      this.pipeline.add(convertToRomanNumerals)
       this.pipeline.add(removeCharacters(['.']))
     })
     docs.forEach(doc => index.addDoc(doc))

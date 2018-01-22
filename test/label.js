@@ -35,7 +35,7 @@ test('sanity test 1', t => {
 
 test('sanity test 2', t => {
   const docs = [
-    {id: 'rank2', label: 'Early Bronze Age'},
+    {id: 'rank2', label: 'Early Bronze III'},
     {id: 'rank1', label: 'Early Bronze'},
     {id: 'rank0', label: 'Bronze'}
   ]
@@ -46,7 +46,7 @@ test('sanity test 2', t => {
 
 test('sanity test 3', t => {
   const docs = [
-    {id: 'rank1', label: 'Early Bronze Age'},
+    {id: 'rank1', label: 'Early Bronze III'},
     {id: 'rank0', label: 'Early Bronze'},
     {id: 'rank2', label: 'Bronze'},
     {id: 'rank3', label: 'Early Curly'},
@@ -170,6 +170,17 @@ test('should ignore `period`', t=> {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
+test('should ignore `age`', t=> {
+  const docs = [
+    {id: 'unranked', label: 'Iron Age'},
+    {id: 'rank1', label: 'Bronze Age'},
+    {id: 'rank0', label: 'Late Bronze'},
+  ]
+  const results = label.index(docs).search('Late Bronze Age')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+})
+
 test('should search decomposed unicode with combining characters removed', t => {
   const docs = [
     {id: 'rank0', label: 'Dông Son'},
@@ -181,11 +192,13 @@ test('should search decomposed unicode with combining characters removed', t => 
 
 test('should understand Roman numerals as equivalent to Arabic numerals', t => {
   const docs = [
+    {id: 'rank2', label: 'Iron Age II'},
+    {id: 'rank1', label: 'Bronze Age III'},
     {id: 'rank0', label: 'Bronze Age II'},
   ]
   const results = label.index(docs).search('Bronze Age 2')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0'])
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
 })
 
 test('should ignore periods', t => {
@@ -195,4 +208,36 @@ test('should ignore periods', t => {
   const results = label.index(docs).search('Athenian supremacy, 479-431 B.C.')
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('identical labels should match', t => {
+  const docs = [
+    {id: 'exactmatch', label: 'Bourbons, 1700-'},
+  ]
+  const results = label.index(docs).search('Bourbons, 1700-')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['exactmatch'])
+})
+
+test('identical alternate labels should match', t => {
+  const docs = [
+    {id: 'exactmatch', label: 'Li Zicheng Rebellion, 1628-1645',
+     localizedLabels: "Li Tzu ch'eng Rebellion, 1628-1645"},
+  ]
+  const results = label.index(docs).search("Li Tzu ch'eng Rebellion, 1628-1645")
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['exactmatch'])
+})
+
+test('strings of two or more digits in labels should be ignored', t => {
+  const docs = [
+    {id: 'unranked2', label: 'Civil War 1861-1865'},
+    {id: 'unranked1', label: 'Civil War (1861 - 1865)'},
+    {id: 'unranked0', label: 'Xianfeng, 1850-1861'},
+    {id: 'rank1', label: 'Abdul Mejid, 1839-1861'},
+    {id: 'rank0', label: 'Abdul Aziz, 1861-1876'},
+  ]
+  const results = label.index(docs).search('Abdul Aziz, 1861-1876')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
