@@ -5,8 +5,6 @@ const TextIndex = require('elasticlunr')
       , filterCombiningCharacters
       , stopwords, removeCharacters } = require('./utils')
 
-TextIndex.tokenizer.setSeperator(/[\s\-,:()]+|\d{3,}|[3-9]\d|2[1-9]/)
-
 module.exports = {
   index: docs => {
     const index = TextIndex(function() {

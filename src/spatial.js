@@ -3,8 +3,6 @@
 const TextIndex = require('elasticlunr')
     , { stopwords } = require('./utils')
 
-TextIndex.tokenizer.setSeperator(/[\s\-,:]+/)
-
 module.exports = {
   index: docs => {
     const index = TextIndex(function() {
@@ -23,4 +21,3 @@ module.exports = {
       }) }
   }
 }
-
