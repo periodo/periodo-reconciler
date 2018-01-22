@@ -3,12 +3,16 @@
 const fromPairs = require('lodash.frompairs')
     , values = require('lodash.values')
     , intersection = require('lodash.intersection')
+    , elasticlunr = require('elasticlunr')
     , label = require('./label')
     , spatial = require('./spatial')
     , temporal = require('./temporal')
     , schulze = require('./schulze')
     , format = require('./format')
     , { DEFAULT_TYPE, WEIGHTS } = require('./consts')
+
+// elasticlunr tokenizer is global, so we configure it here!
+elasticlunr.tokenizer.setSeperator(/[\s\-,:()]+|\d{3,}|[3-9]\d|2[1-9]/)
 
 const parseProperties = properties => properties
   ? fromPairs(properties.map(({p, pid, v}) => [p || pid, v]))
