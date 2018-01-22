@@ -13,7 +13,7 @@ module.exports = {
       this.addField('label')
       this.addField('localizedLabels')
       this.pipeline.reset()
-      this.pipeline.add(stopwords(['period']))
+      this.pipeline.add(stopwords(['period', 'age']))
       this.pipeline.add(filterCombiningCharacters)
       this.pipeline.add(convertToRomanNumerals)
       this.pipeline.add(removeCharacters(['.']))

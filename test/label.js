@@ -35,7 +35,7 @@ test('sanity test 1', t => {
 
 test('sanity test 2', t => {
   const docs = [
-    {id: 'rank2', label: 'Early Bronze Age'},
+    {id: 'rank2', label: 'Early Bronze III'},
     {id: 'rank1', label: 'Early Bronze'},
     {id: 'rank0', label: 'Bronze'}
   ]
@@ -46,7 +46,7 @@ test('sanity test 2', t => {
 
 test('sanity test 3', t => {
   const docs = [
-    {id: 'rank1', label: 'Early Bronze Age'},
+    {id: 'rank1', label: 'Early Bronze III'},
     {id: 'rank0', label: 'Early Bronze'},
     {id: 'rank2', label: 'Bronze'},
     {id: 'rank3', label: 'Early Curly'},
@@ -166,6 +166,17 @@ test('should ignore `period`', t=> {
     {id: 'unranked', label: 'Cycladic Period'},
   ]
   const results = label.index(docs).search('Late Helladic Period')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+})
+
+test('should ignore `age`', t=> {
+  const docs = [
+    {id: 'unranked', label: 'Iron Age'},
+    {id: 'rank1', label: 'Bronze Age'},
+    {id: 'rank0', label: 'Late Bronze'},
+  ]
+  const results = label.index(docs).search('Late Bronze Age')
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
