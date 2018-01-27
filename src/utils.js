@@ -1,9 +1,7 @@
 "use strict";
 
-const { readFileSync } = require('fs')
-    , uniq = require('lodash.uniq')
-    , fromPairs = require('lodash.frompairs')
-    , flatten = require('lodash.flatten')
+const R = require('ramda')
+    , { readFileSync } = require('fs')
     , elasticlunr = require('elasticlunr')
     , unorm = require('unorm')
 
@@ -15,7 +13,7 @@ const register = (f, name) => {
 
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
 // scores: {foo: 0.7, bar: 1.1}
-const scoringToScores = choices => scoring => fromPairs(scoring
+const scoringToScores = choices => scoring => R.fromPairs(scoring
   .filter(({ref}) => choices.indexOf(ref) >= 0)
   .map(({ref, score}) => [ref, score])
 )
@@ -27,7 +25,7 @@ const pairwisePreferences = (scorings, weights, choices) => {
 
   const _choices = choices
     ? choices
-    : uniq(flatten(scorings).map(({ref}) => ref)).sort()
+    : R.uniq(R.flatten(scorings).map(({ref}) => ref)).sort()
 
   const _scores = scorings.map(scoringToScores(_choices))
 
@@ -47,7 +45,7 @@ const pairwisePreferences = (scorings, weights, choices) => {
 }
 
 const stopwords = words => {
-  const words_has = fromPairs(words.map(x => [x, true]))
+  const words_has = R.fromPairs(words.map(x => [x, true]))
   return register(
     token => words_has[token] ? undefined : token,
     words.join('|'))
