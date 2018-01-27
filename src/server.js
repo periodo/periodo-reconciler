@@ -1,11 +1,10 @@
 "use strict";
 
-const http = require('http')
+const R = require('ramda')
+    , http = require('http')
     , route = require('micro-route')
     , url = require('url')
     , bodyParse = require('urlencoded-body-parser')
-    , map = require('lodash.map')
-    , fromPairs = require('lodash.frompairs')
     , { METADATA, PROPERTIES } = require('./consts')
     , reconcile = require('./reconcile')
     , format = require('../src/format_preview')
@@ -45,9 +44,9 @@ async function parseRequestParams(req) {
 const parseQueries = queries => {
   try {
     const o = JSON.parse(queries)
-    return o !== null && typeof o === 'object' ? o : null
+    return o !== null && typeof o === 'object' ? o : {}
   } catch (e) {
-    return null
+    return {}
   }
 }
 
@@ -62,12 +61,12 @@ module.exports = ({periods, sources}) => {
 
   const rootHandler = ({queries, callback}, res) => {
     if (queries) {
-      const parsedQueries = parseQueries(queries)
-      if (parsedQueries) {
-        const results = fromPairs(
-          map(
-            parsedQueries,
-            (query, key) => [key, {result: index.search(query)}]
+      const parsedQueries = R.toPairs(parseQueries(queries))
+      if (parsedQueries.length) {
+        const results = R.fromPairs(
+          R.map(
+            ([key, query]) => [key, {result: index.search(query)}],
+            parsedQueries
           )
         )
         sendJSON(callback, results, res)

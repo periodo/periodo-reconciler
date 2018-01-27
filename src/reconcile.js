@@ -1,8 +1,6 @@
 "use strict";
 
-const fromPairs = require('lodash.frompairs')
-    , values = require('lodash.values')
-    , intersection = require('lodash.intersection')
+const R = require('ramda')
     , elasticlunr = require('elasticlunr')
     , label = require('./label')
     , spatial = require('./spatial')
@@ -15,12 +13,13 @@ const fromPairs = require('lodash.frompairs')
 elasticlunr.tokenizer.setSeperator(/[\s\-,:()]+|\d{3,}|[3-9]\d|2[1-9]/)
 
 const parseProperties = properties => properties
-  ? fromPairs(properties.map(({p, pid, v}) => [p || pid, v]))
+  ? R.fromPairs(properties.map(({p, pid, v}) => [p || pid, v]))
   : {}
 
 module.exports = {
   against: periods => {
-    const _periods = values(periods)
+
+    const _periods = R.values(periods)
         , labelIndex = label.index(_periods)
         , spatialIndex = spatial.index(_periods)
         , temporalIndex = temporal.index(_periods)
@@ -43,10 +42,10 @@ module.exports = {
           weights.push(WEIGHTS.temporal)
         }
 
-        const choices = intersection(
-          ...results.map(results => results.map(({ref}) => ref))
+        const refs = results.map(results => results.map(({ref}) => ref))
+        const choices = R.reduce(
+          R.intersection, R.head(refs), R.tail(refs)
         ).sort()
-
         const ranking = schulze(results, weights, choices)
 
         return ranking.slice(0, limit)
