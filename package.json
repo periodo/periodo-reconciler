@@ -19,6 +19,7 @@
     "update_dataset": "wget http://n2t.net/ark:/99152/p0d.json",
     "lint": "eslint src bin test",
     "pretest": "npm -s run lint",
+    "tape": "tape test/*.js",
     "test": "tape test/*.js | faucet",
     "prepare": "npm -s run test",
     "start": "nodemon ./bin/serve.js p0d.json"
