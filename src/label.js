@@ -1,21 +1,18 @@
 "use strict";
 
-const TextIndex = require('elasticlunr')
+const TextIndex = require('./textindex')
     , { convertToRomanNumerals
-      , filterCombiningCharacters
-      , stopwords, removeCharacters } = require('./utils')
+      , filterCombiningCharacters } = require('./utils')
 
 module.exports = {
   index: docs => {
-    const index = TextIndex(function() {
-      this.addField('label')
-      this.addField('localizedLabels')
-      this.pipeline.reset()
-      this.pipeline.add(stopwords(['period', 'age']))
-      this.pipeline.add(filterCombiningCharacters)
-      this.pipeline.add(convertToRomanNumerals)
-      this.pipeline.add(removeCharacters(['.']))
-    })
+    const index = TextIndex(
+      { fields: ['label', 'localizedLabels']
+      , filters: [filterCombiningCharacters, convertToRomanNumerals]
+      , stopwords: ['period', 'age']
+      , stopchars: ['.']
+      }
+    )
     docs.forEach(doc => index.addDoc(doc))
 
     return { search: query => index.search(query,

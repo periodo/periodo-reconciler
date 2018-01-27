@@ -1,16 +1,14 @@
 "use strict";
 
-const TextIndex = require('elasticlunr')
-    , { stopwords } = require('./utils')
+const TextIndex = require('./textindex')
 
 module.exports = {
   index: docs => {
-    const index = TextIndex(function() {
-      this.addField('spatialCoverage')
-      this.addField('spatialCoverageDescription')
-      this.pipeline.reset()
-      this.pipeline.add(stopwords(['and', 'or']))
-    })
+    const index = TextIndex(
+      { fields: ['spatialCoverage', 'spatialCoverageDescription']
+      , stopwords: ['and', 'or']
+      }
+    )
     docs.forEach(doc => index.addDoc(doc))
 
     return { search: query => index.search(query,

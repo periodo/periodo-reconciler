@@ -2,14 +2,7 @@
 
 const R = require('ramda')
     , { readFileSync } = require('fs')
-    , elasticlunr = require('elasticlunr')
     , unorm = require('unorm')
-
-const register = (f, name) => {
-  delete elasticlunr.Pipeline.registeredFunctions[name]
-  elasticlunr.Pipeline.registerFunction(f, name)
-  return f
-}
 
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
 // scores: {foo: 0.7, bar: 1.1}
@@ -44,29 +37,12 @@ const pairwisePreferences = (scorings, weights, choices) => {
   )
 }
 
-const stopwords = words => {
-  const words_has = R.fromPairs(words.map(x => [x, true]))
-  return register(
-    token => words_has[token] ? undefined : token,
-    words.join('|'))
-}
-
-const SPECIAL_CHARS = '^$\\.*+?()[]{}`'
-
-const escape = c => SPECIAL_CHARS.includes(c) ? `\\${c}` : c
-
-const removeCharacters = chars => register(
-  token => token.replace(RegExp(`[${chars.map(escape).join('')}]+`, 'g'), ''),
-  chars.join('')
-)
-
 // http://www.unicode.org/charts/PDF/U0300.pdf
 const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/g
 
 function filterCombiningCharacters(token) {
   return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')
 }
-register(filterCombiningCharacters, 'filterCombiningCharacters')
 
 // "or at most 1-20 -- no one has phase numbering beyond 20" -- Adam
 const ROMAN_NUMERALS = [
@@ -101,14 +77,11 @@ function convertToRomanNumerals(token) {
     return ROMAN_NUMERALS[int]
   }
 }
-register(convertToRomanNumerals, 'convertToRomanNumerals')
 
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
 module.exports = {
   pairwisePreferences,
-  stopwords,
-  removeCharacters,
   loadJSON,
   filterCombiningCharacters,
   convertToRomanNumerals }
