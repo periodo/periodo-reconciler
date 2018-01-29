@@ -229,3 +229,29 @@ test('strings of two or more digits in labels should be ignored', t => {
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
+
+test('"war" is not a separate token', t => {
+  const docs = [
+    {id: 'rank0', label: 'Civil War (1861 - 1865)'},
+    {id: 'rank1', label: 'Civil War 1861-1865'},
+    {id: 'unranked0', label: 'Xianfeng, 1850-1861'},
+    {id: 'unranked1', label: 'Some Other War, 1839-1861'},
+    {id: 'unranked2', label: 'Civil Wars'},
+  ]
+  const results = label.index(docs).search('Civil War 1861-1865')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+})
+
+test('"wars" is not a separate token', t => {
+  const docs = [
+    {id: 'unranked0', label: 'Civil War (1861 - 1865)'},
+    {id: 'unranked1', label: 'Civil War 1861-1865'},
+    {id: 'unranked2', label: 'Xianfeng, 1850-1861'},
+    {id: 'unranked3', label: 'Some Other War, 1839-1861'},
+    {id: 'rank0', label: 'Civil Wars'},
+  ]
+  const results = label.index(docs).search('Civil Wars')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})

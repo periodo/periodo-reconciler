@@ -6,8 +6,13 @@ const R = require('ramda')
 const SEPARATOR = re(
 `\\s+(?!           # spaces, except before:
    (?:\\b
-     (?:i{1,3}|v|x{1,2}){1,3}  # Roman numerals
-     (?:[abc](?:[123])?)?      # possibly with letter/number suffixes
+     (?:
+       (?:
+         (?:i{1,3}|v|x{1,2}){1,3}  # Roman numerals
+         (?:[abc](?:[123])?)?      # possibly with letter/number suffixes
+       )
+       | wars?                     # or "war[s]"
+     )
    \\b)
  )
  | [\\-,:()]+      # other separating punctuation

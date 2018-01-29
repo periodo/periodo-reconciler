@@ -36,6 +36,14 @@ test('except before Roman numerals or after phase modifiers', t => {
   t.same(tokenize('Early Early Bronze'), ['early early bronze'])
 })
 
+test('or before "war"', t => {
+  t.plan(4)
+  t.same(tokenize('Civil War'), ['civil war'])
+  t.same(tokenize('War of Independence'), ['war', 'of', 'independence'])
+  t.same(tokenize('Servile Wars, 135-71 B.C'), ['servile wars', 'b.c'])
+  t.same(tokenize('South African War, 1899-1902'), ['south', 'african war'])
+})
+
 test('years are separators', t => {
   t.plan(8)
   t.same(tokenize('Alexander 1501-1506'), ['alexander'])
