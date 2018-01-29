@@ -2,13 +2,20 @@
 
 const R = require('ramda')
     , elasticlunr = require('elasticlunr')
+    , unorm = require('unorm')
     , tokenize = require('./tokenize')
-    , {convertToRomanNumerals, filterCombiningCharacters} = require('./utils')
 
 const register = (f, name) => {
   delete elasticlunr.Pipeline.registeredFunctions[name]
   elasticlunr.Pipeline.registerFunction(f, name)
   return f
+}
+
+// http://www.unicode.org/charts/PDF/U0300.pdf
+const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/g
+
+function filterCombiningCharacters(token) {
+  return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')
 }
 
 const removeWords = words => {
@@ -27,9 +34,8 @@ const removeChars = chars => {
   return register(filter, chars.join(''))
 }
 
+// global elasticlunr configuration
 elasticlunr.tokenizer = tokenize
-
-register(convertToRomanNumerals, 'convertToRomanNumerals')
 register(filterCombiningCharacters, 'filterCombiningCharacters')
 
 module.exports = ({fields, filters, stopwords, stopchars}) => {
@@ -47,7 +53,7 @@ module.exports = ({fields, filters, stopwords, stopchars}) => {
 
   if (filters) {
     for (const filter of filters) {
-      index.pipeline.add(filter)
+      index.pipeline.add(elasticlunr.Pipeline.registeredFunctions[filter])
     }
   }
 

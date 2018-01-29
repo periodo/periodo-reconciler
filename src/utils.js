@@ -2,7 +2,6 @@
 
 const R = require('ramda')
     , { readFileSync } = require('fs')
-    , unorm = require('unorm')
 
 // scoring: [{ref: 'foo', score: 0.7}, {ref: 'bar', score: 1.1}]
 // scores: {foo: 0.7, bar: 1.1}
@@ -37,51 +36,9 @@ const pairwisePreferences = (scorings, weights, choices) => {
   )
 }
 
-// http://www.unicode.org/charts/PDF/U0300.pdf
-const COMBINING_CHARACTERS_REGEX = /[\u0300-\u036f]/g
-
-function filterCombiningCharacters(token) {
-  return unorm.nfd(token).replace(COMBINING_CHARACTERS_REGEX, '')
-}
-
-// "or at most 1-20 -- no one has phase numbering beyond 20" -- Adam
-const ROMAN_NUMERALS = [
-  '',
-  'i',
-  'ii',
-  'iii',
-  'iv',
-  'v',
-  'vi',
-  'vii',
-  'viii',
-  'ix',
-  'x',
-  'xi',
-  'xii',
-  'xiii',
-  'xiv',
-  'xv',
-  'xvi',
-  'xvii',
-  'xviii',
-  'xix',
-  'xx',
-]
-
-function convertToRomanNumerals(token) {
-  const int = parseInt(token, 10)
-  if (isNaN(int) || int < 1 || int > 20) {
-    return token
-  } else {
-    return ROMAN_NUMERALS[int]
-  }
-}
-
 const loadJSON = path => JSON.parse(readFileSync(path, 'utf8'))
 
 module.exports = {
   pairwisePreferences,
-  loadJSON,
-  filterCombiningCharacters,
-  convertToRomanNumerals }
+  loadJSON
+}

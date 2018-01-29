@@ -1,14 +1,12 @@
 "use strict";
 
 const TextIndex = require('./textindex')
-    , { convertToRomanNumerals
-      , filterCombiningCharacters } = require('./utils')
 
 module.exports = {
   index: docs => {
     const index = TextIndex(
       { fields: ['label', 'localizedLabels']
-      , filters: [filterCombiningCharacters, convertToRomanNumerals]
+      , filters: ['filterCombiningCharacters']
       , stopwords: ['period', 'age']
       , stopchars: ['.']
       }

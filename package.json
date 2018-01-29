@@ -38,7 +38,8 @@
     "ramda": "^0.25.0",
     "union-type": "^0.4.1",
     "unorm": "^1.4.1",
-    "urlencoded-body-parser": "^2.0.1"
+    "urlencoded-body-parser": "^2.0.1",
+    "xregexp": "^4.0.0"
   },
   "devDependencies": {
     "eslint": "^4.15.0",
