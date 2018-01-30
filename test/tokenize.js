@@ -40,8 +40,15 @@ test('or before "war"', t => {
   t.plan(4)
   t.same(tokenize('Civil War'), ['civil war'])
   t.same(tokenize('War of Independence'), ['war', 'of', 'independence'])
-  t.same(tokenize('Servile Wars, 135-71 B.C'), ['servile wars', 'b.c'])
-  t.same(tokenize('South African War, 1899-1902'), ['south', 'african war'])
+  t.same(tokenize('Servile Wars, 135-71 B.C'), ['servile wars', 'bc'])
+  t.same(tokenize('South African War, 1899-1902'), ['south african war'])
+})
+
+test('or before "rebellion"', t => {
+  t.plan(2)
+  t.same(tokenize('Nian Rebellion'), ['nian rebellion'])
+  t.same(tokenize('Rebellion of Zebrzydowski'),
+    ['rebellion', 'of', 'zebrzydowski'])
 })
 
 test('years are separators', t => {
@@ -53,24 +60,24 @@ test('years are separators', t => {
   t.same(tokenize('Alexander, 501-506'), ['alexander'])
   t.same(
     tokenize('Athenian supremacy, 479-431 B.C.'),
-    ['athenian', 'supremacy', 'b.c.']
+    ['athenian', 'supremacy', 'bc']
   )
   t.same(tokenize('Bourbons, 1700-'), ['bourbons'])
   t.same(
     tokenize("Li Tzu ch'eng Rebellion, 1628-1645"),
-    ['li', 'tzu', "ch'eng", 'rebellion']
+    ['li', 'tzu', 'cheng rebellion']
   )
 })
 
-test('unicode', t => {
+test('diacritics should be removed', t => {
   t.plan(2)
   t.same(
     tokenize('Ύστερη Εποχή του Χαλκού'),
-    ['ύστερη', 'εποχή', 'του', 'χαλκού']
+    ['υστερη', 'εποχη', 'του', 'χαλκου']
   )
   t.same(
     tokenize('Пізньоантичний період'),
-    ['пізньоантичний', 'період']
+    ['пізньоантичнии', 'період']
   )
 })
 
@@ -78,7 +85,7 @@ test('LCSH', t => {
   t.plan(1)
   t.same(
     tokenize('18th Century::2nd/3rd quarter (1725 - 1774)'),
-    ['18th', 'century', '2nd/3rd', 'quarter']
+    ['18th century', '2nd 3rd quarter']
   )
 })
 
@@ -87,4 +94,11 @@ test('arabic numeral phases converted to Roman', t => {
   t.same(tokenize('Early Bronze 2'), ['early bronze ii'])
   t.same(tokenize('Weeden Island 5'), ['weeden', 'island v'])
   t.same(tokenize('Ninevite 5 Painted'), ['ninevite v', 'painted'])
+})
+
+test('ordinal modifiers included in token', t => {
+  t.plan(3)
+  t.same(tokenize('1st Post'), ['1st post'])
+  t.same(tokenize('2nd/3rd quarter'), ['2nd 3rd quarter'])
+  t.same(tokenize('18th Century'), ['18th century'])
 })

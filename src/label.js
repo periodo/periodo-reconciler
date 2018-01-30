@@ -6,9 +6,30 @@ module.exports = {
   index: docs => {
     const index = TextIndex(
       { fields: ['label', 'localizedLabels']
-      , filters: ['filterCombiningCharacters']
-      , stopwords: ['period', 'age']
-      , stopchars: ['.']
+      , stopwords: [
+          'a',
+          'ad',
+          'age',
+          'and',
+          'b',
+          'bc',
+          'bce',
+          'c',
+          'ca',
+          'd',
+          'epoch',
+          'era',
+          'for',
+          'in',
+          'of',
+          'or',
+          'period',
+          'periods',
+          'the',
+          'to',
+          'with',
+          'years'
+        ]
       }
     )
     docs.forEach(doc => index.addDoc(doc))

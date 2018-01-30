@@ -6,7 +6,7 @@ module.exports = {
   index: docs => {
     const index = TextIndex(
       { fields: ['spatialCoverage', 'spatialCoverageDescription']
-      , stopwords: ['and', 'or']
+      , stopwords: ['and', 'or', 'of', 'in']
       }
     )
     docs.forEach(doc => index.addDoc(doc))

@@ -49,9 +49,12 @@ Interval.prototype.overlaps = function(interval) {
   }, this)
 }
 
-Interval.prototype.expand = function(i) {
+Interval.prototype.expand = function() {
   return Interval.case({
-    Interval: () => Interval.Interval(this[0] - i, this[1] + i),
+    Interval: () => {
+      const i = Math.min(Math.ceil(this.length() / 2.0), 50)
+      return Interval.Interval(this[0] - i, this[1] + i)
+    },
     InvalidInterval: () => Interval.InvalidInterval
   }, this)
 }

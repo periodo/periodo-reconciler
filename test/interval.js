@@ -107,8 +107,14 @@ test('invalid intervals overlap nothing', t => {
   t.equal(interval.overlaps(interval), 0)
 })
 
-test('expanding intervals', t => {
-  const interval = Interval.Interval(600, 1000)
-  t.plan(1)
-  t.deepEqual(interval.expand(50), Interval.Interval(550, 1050))
+test('expand broadens x2, up to 100', t => {
+  const interval401 = Interval.Interval(600, 1000)
+  const interval41 = Interval.Interval(60, 100)
+  const interval5 = Interval.Interval(6, 10)
+  const interval4 = Interval.Interval(6, 9)
+  t.plan(4)
+  t.deepEqual(interval401.expand(), Interval.Interval(550, 1050))
+  t.deepEqual(interval41.expand(), Interval.Interval(39, 121))
+  t.deepEqual(interval5.expand(), Interval.Interval(3, 13))
+  t.deepEqual(interval4.expand(), Interval.Interval(4, 11))
 })

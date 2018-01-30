@@ -189,8 +189,9 @@ test('should understand Roman numerals as equivalent to Arabic numerals', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
 })
 
-test('should ignore periods', t => {
+test('should ignore BC', t => {
   const docs = [
+    {id: 'unranked', label: '1200 BC Middle East'},
     {id: 'rank0', label: 'Athenian supremacy, 479-431 B.C'},
   ]
   const results = label.index(docs).search('Athenian supremacy, 479-431 B.C.')
@@ -252,6 +253,27 @@ test('"wars" is not a separate token', t => {
     {id: 'rank0', label: 'Civil Wars'},
   ]
   const results = label.index(docs).search('Civil Wars')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('"of" is a stopword', t => {
+  const docs = [
+    {id: 'unranked', label: 'Revolt of Sertorius'},
+    {id: 'rank0', label: 'Age of Tyrants'},
+  ]
+  const results = label.index(docs).search('Age of Tyrants')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('hyphenated and unhyphenated versions of modifiers should match', t => {
+  const docs = [
+    {id: 'unranked1', label: 'Babylonian'},
+    {id: 'unranked2', label: 'Neo'},
+    {id: 'rank0', label: 'Neo Babylonian'},
+  ]
+  const results = label.index(docs).search('Neo-Babylonian')
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0'])
 })
