@@ -25,7 +25,7 @@ test('scoring intervals for interval queries', t => {
 
 test('point query', t => {
   const docs = [
-    {id: 'rank1', start: {in: {year: 300}}, stop: {in: {year: 500}}},
+    {id: 'rank1', start: {in: {year: 250}}, stop: {in: {year: 500}}},
     {id: 'rank0', start: {in: {year: 100}}, stop: {in: {year: 300}}},
     {id: 'unranked', start: {in: {year: 500}}, stop: {in: {year: 700}}}
   ]
@@ -36,7 +36,7 @@ test('point query', t => {
 
 test('point query disguised as interval', t => {
   const docs = [
-    {id: 'rank1', start: {in: {year: 300}}, stop: {in: {year: 500}}},
+    {id: 'rank1', start: {in: {year: 250}}, stop: {in: {year: 500}}},
     {id: 'rank0', start: {in: {year: 100}}, stop: {in: {year: 300}}},
     {id: 'unranked', start: {in: {year: 500}}, stop: {in: {year: 700}}}
   ]

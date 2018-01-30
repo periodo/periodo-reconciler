@@ -45,8 +45,8 @@ class IntervalIndex {
         if (s > 0) {
           return results.concat([{ref: id, score: s}])
         }
-        // try again with a 100-year buffer for half the score
-        s = score(query, interval.expand(100)) / 2.0
+        // try again with expanded interval buffer for half the score
+        s = score(query, interval.expand()) / 2.0
         return s > 0
           ? results.concat([{ref: id, score: s}])
           : results

@@ -33,27 +33,27 @@ test('sanity test 1', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-test('sanity test 2', t => {
+test('parts and modifiers must match 1', t => {
   const docs = [
-    {id: 'rank2', label: 'Early Bronze III'},
-    {id: 'rank1', label: 'Early Bronze'},
+    {id: 'unranked1', label: 'Early Bronze III'},
+    {id: 'unranked2', label: 'Early Bronze'},
     {id: 'rank0', label: 'Bronze'}
   ]
   const results = label.index(docs).search('Bronze')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
-test('sanity test 3', t => {
+test('parts and modifiers must match 2', t => {
   const docs = [
-    {id: 'rank1', label: 'Early Bronze III'},
+    {id: 'unranked1', label: 'Early Bronze III'},
     {id: 'rank0', label: 'Early Bronze'},
-    {id: 'rank2', label: 'Bronze'},
-    {id: 'rank3', label: 'Early Curly'},
+    {id: 'unranked2', label: 'Bronze'},
+    {id: 'unranked3', label: 'Early Curly'},
   ]
   const results = label.index(docs).search('Early Bronze')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2', 'rank3'])
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
 test('sanity test 4', t => {
@@ -76,10 +76,10 @@ test('sanity test 5', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-test('sanity test 6', t => {
+test('appended temporal range is ignored', t => {
   const docs = [
-    {id: 'rank1', label: 'Alexander, 1501-1506'},
-    {id: 'rank0', label: 'Alexander'}
+    {id: 'rank0', label: 'Alexander, 1501-1506'},
+    {id: 'rank1', label: 'Alexander'}
   ]
   const results = label.index(docs).search('alexander')
   t.plan(1)
@@ -127,7 +127,7 @@ test('chinese', t => {
 
 test('weird LCSH syntax', t => {
   const docs = [
-    {id: 'rank1', label: '18th Century::2nd/3rd quarter (1725 - 1774'},
+    {id: 'rank1', label: '18th Century::2nd/3rd quarter (1725 - 1774)'},
     {id: 'rank0', label: '18th Century'}
   ]
   const results = label.index(docs).search('18th century')
@@ -135,50 +135,38 @@ test('weird LCSH syntax', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
 })
 
-test('should match at least one token in label', t=> {
+test('should match with special modifier/suffix tokenizing', t=> {
   const docs = [
-    {id: 'rank1', label: 'Late Helladic'},
-    {id: 'rank2', label: 'Late Cycladic'},
+    {id: 'unranked1', label: 'Late Helladic'},
+    {id: 'unranked2', label: 'Late Cycladic'},
     {id: 'rank0', label: 'Late Helladic IIIA'},
-    {id: 'unranked', label: 'Early Cycladic'},
+    {id: 'unranked3', label: 'Early Cycladic'},
   ]
   const results = label.index(docs).search('Late Helladic IIIA')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
-})
-
-test('should match at least one token in localized labels', t=> {
-  const docs = [
-    {id: 'rank1', localizedLabels: 'Late Helladic'},
-    {id: 'rank2', localizedLabels: 'Late Cycladic'},
-    {id: 'rank0', localizedLabels: 'Late Helladic IIIA'},
-    {id: 'unranked', localizedLabels: 'Early Cycladic'},
-  ]
-  const results = label.index(docs).search('Late Helladic IIIA')
-  t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
 test('should ignore `period`', t=> {
   const docs = [
     {id: 'rank0', label: 'Late Helladic'},
-    {id: 'rank1', label: 'Late Cycladic'},
-    {id: 'unranked', label: 'Cycladic Period'},
+    {id: 'unranked1', label: 'Late Cycladic'},
+    {id: 'unranked2', label: 'Cycladic Period'},
   ]
   const results = label.index(docs).search('Late Helladic Period')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
 test('should ignore `age`', t=> {
   const docs = [
-    {id: 'unranked', label: 'Iron Age'},
-    {id: 'rank1', label: 'Bronze Age'},
+    {id: 'unranked1', label: 'Iron Age'},
+    {id: 'unranked2', label: 'Bronze Age'},
     {id: 'rank0', label: 'Late Bronze'},
   ]
   const results = label.index(docs).search('Late Bronze Age')
   t.plan(1)
-  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
 
 test('should search decomposed unicode with combining characters removed', t => {
@@ -201,8 +189,9 @@ test('should understand Roman numerals as equivalent to Arabic numerals', t => {
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1', 'rank2'])
 })
 
-test('should ignore periods', t => {
+test('should ignore BC', t => {
   const docs = [
+    {id: 'unranked', label: '1200 BC Middle East'},
     {id: 'rank0', label: 'Athenian supremacy, 479-431 B.C'},
   ]
   const results = label.index(docs).search('Athenian supremacy, 479-431 B.C.')
@@ -240,4 +229,51 @@ test('strings of two or more digits in labels should be ignored', t => {
   const results = label.index(docs).search('Abdul Aziz, 1861-1876')
   t.plan(1)
   t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+})
+
+test('"war" is not a separate token', t => {
+  const docs = [
+    {id: 'rank0', label: 'Civil War (1861 - 1865)'},
+    {id: 'rank1', label: 'Civil War 1861-1865'},
+    {id: 'unranked0', label: 'Xianfeng, 1850-1861'},
+    {id: 'unranked1', label: 'Some Other War, 1839-1861'},
+    {id: 'unranked2', label: 'Civil Wars'},
+  ]
+  const results = label.index(docs).search('Civil War 1861-1865')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0', 'rank1'])
+})
+
+test('"wars" is not a separate token', t => {
+  const docs = [
+    {id: 'unranked0', label: 'Civil War (1861 - 1865)'},
+    {id: 'unranked1', label: 'Civil War 1861-1865'},
+    {id: 'unranked2', label: 'Xianfeng, 1850-1861'},
+    {id: 'unranked3', label: 'Some Other War, 1839-1861'},
+    {id: 'rank0', label: 'Civil Wars'},
+  ]
+  const results = label.index(docs).search('Civil Wars')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('"of" is a stopword', t => {
+  const docs = [
+    {id: 'unranked', label: 'Revolt of Sertorius'},
+    {id: 'rank0', label: 'Age of Tyrants'},
+  ]
+  const results = label.index(docs).search('Age of Tyrants')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
+})
+
+test('hyphenated and unhyphenated versions of modifiers should match', t => {
+  const docs = [
+    {id: 'unranked1', label: 'Babylonian'},
+    {id: 'unranked2', label: 'Neo'},
+    {id: 'rank0', label: 'Neo Babylonian'},
+  ]
+  const results = label.index(docs).search('Neo-Babylonian')
+  t.plan(1)
+  t.same(results.map(({ref}) => ref), ['rank0'])
 })
