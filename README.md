@@ -64,3 +64,7 @@ The place name (if provided) is matched against the [spatial coverage descriptio
 ### Matching years or year ranges again periods' temporal extents
 
 The year or year range (if provided) is matched again the [temporal extent](http://perio.do/technical-overview/#temporal-extent) of each period definition. Single years match if they fall within the widest temporal extent for the period, plus one century on either side. Year ranges match to the extent that they overlap with the widest temporal extent for the period, plus one century on either side.
+
+## The reconciliation API
+
+It is possible to use the PeriodO reconciliation API directly, rather than using it via OpenRefine. See the [reconciliation API documentation](API.md).
