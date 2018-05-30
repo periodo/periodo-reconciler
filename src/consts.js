@@ -6,7 +6,7 @@ const ROOT = `http://localhost:${PORT}`
 
 const DEFAULT_TYPE = {
   id: 'http://www.w3.org/2004/02/skos/core#Concept',
-  name: 'Period definition',
+  name: 'Period',
 }
 
 const PROPERTIES =

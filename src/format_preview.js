@@ -36,7 +36,7 @@ module.exports = function format(periodID, periods, sources) {
              href="${periodID.slice(0, -4)}">${getDisplayTitle(source)}</a>
         </p>
         <p>
-          <i>contains ${source.get('numDefinitions')} period definitions</i>
+          <i>contains ${source.get('numPeriods')} periods</i>
         </p>
       </dd>
 
