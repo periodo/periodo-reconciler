@@ -42,7 +42,7 @@
     "xregexp": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^4.15.0",
+    "eslint": "^5.6.1",
     "faucet": "0.0.1",
     "node-wget": "^0.4.2",
     "nodemon": "^1.14.9",
