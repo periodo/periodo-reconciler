@@ -16,9 +16,10 @@
     "reconciliation"
   ],
   "scripts": {
-    "update_dataset": "wget http://n2t.net/ark:/99152/p0d.json",
+    "update_dataset":
+    "if [ ! -e p0d.json ]; then wget -N http://n2t.net/ark:/99152/p0d.json; fi",
     "lint": "eslint src bin test",
-    "pretest": "npm -s run lint",
+    "pretest": "npm -s run lint && npm -s run update_dataset",
     "tape": "tape test/*.js",
     "test": "tape test/*.js | faucet",
     "prepare": "npm -s run test",
