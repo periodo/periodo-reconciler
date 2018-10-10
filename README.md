@@ -1,6 +1,6 @@
 ## Open Refine reconciliation service for PeriodO data
 
-Before you begin, make sure [Node.js version 8 or higher](https://nodejs.org/en/download/current/) and [OpenRefine](http://openrefine.org/download.html) are installed on your machine.
+Before you begin, make sure [Node.js version 10 or higher](https://nodejs.org/en/download/current/) and [OpenRefine](http://openrefine.org/download.html) are installed on your machine.
 
 The commands below must be typed into a terminal window.
 
