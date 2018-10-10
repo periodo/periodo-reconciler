@@ -16,8 +16,7 @@
     "reconciliation"
   ],
   "scripts": {
-    "update_dataset":
-    "if [ ! -e p0d.json ]; then wget -N http://n2t.net/ark:/99152/p0d.json; fi",
+    "update_dataset": "if [ ! -e p0d.json ]; then wget -N http://n2t.net/ark:/99152/p0d.json; fi",
     "lint": "eslint src bin test",
     "pretest": "npm -s run lint && npm -s run update_dataset",
     "tape": "tape test/*.js",
@@ -40,14 +39,14 @@
     "union-type": "^0.4.1",
     "unorm": "^1.4.1",
     "urlencoded-body-parser": "^2.0.1",
-    "xregexp": "^4.0.0"
+    "xregexp": "^4.2.0"
   },
   "devDependencies": {
-    "eslint": "^4.15.0",
+    "eslint": "^5.6.1",
     "faucet": "0.0.1",
-    "node-wget": "^0.4.2",
-    "nodemon": "^1.14.9",
-    "supertest": "^3.0.0",
-    "tape": "^4.8.0"
+    "node-wget": "^0.4.3",
+    "nodemon": "^1.18.4",
+    "supertest": "^3.3.0",
+    "tape": "^4.9.1"
   }
 }
