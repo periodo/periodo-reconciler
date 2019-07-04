@@ -38,7 +38,7 @@
     "ramda": "^0.25.0",
     "union-type": "^0.4.1",
     "unorm": "^1.4.1",
-    "urlencoded-body-parser": "^2.0.1",
+    "urlencoded-body-parser": "^3.0.0",
     "xregexp": "^4.2.0"
   },
   "devDependencies": {
