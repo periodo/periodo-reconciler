@@ -35,7 +35,7 @@
     "immutable": "^3.8.2",
     "micro-route": "^2.5.0",
     "periodo-utils": "^4.2.0",
-    "ramda": "^0.25.0",
+    "ramda": "^0.27.0",
     "union-type": "^0.4.1",
     "unorm": "^1.4.1",
     "urlencoded-body-parser": "^2.0.1",
