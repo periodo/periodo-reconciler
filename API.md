@@ -4,8 +4,8 @@
 * [Reconcile period names (using `GET`)](#reconcile-period-names-using-get)
 * [Reconcile period names (using `POST`)](#reconcile-period-names-using-post)
 * [Suggest property names](#suggest-property-names)
-* [Suggest period definitions](#suggest-period-definitions)
-* [Preview period definition details](#preview-period-definition-details)
+* [Suggest periods](#suggest-periods)
+* [Preview period details](#preview-period-details)
 
 
 ----
@@ -48,7 +48,7 @@ Fetch a description of the reconciliation service. Returns a JSON object as docu
       "defaultTypes": [
         {
           "id": "http://www.w3.org/2004/02/skos/core#Concept",
-          "name": "Period definition"
+          "name": "period"
         }
       ],
       "view": {
@@ -85,7 +85,7 @@ Fetch a description of the reconciliation service. Returns a JSON object as docu
 
 Given a set of period names (and optionally some other descriptive
 properties of the named periods), return a ranked list of matching
-period definitions.
+periods.
 
 * __URL path__
 
@@ -170,11 +170,11 @@ period definitions.
     corresponding to the ones provided in the `queries` object. Each
     value is a JSON object with a single `result` key, the value of
     which is an array of JSON result objects. Each result object
-    describes a single period definition and has the following keys:
+    describes a single period and has the following keys:
     
-    * `id` is the permanent identifier URL of the period definition
-    * `name` is a descriptive label for the period definition
-    * `type` asserts that the period definition is a [`skos:Concept`](https://www.w3.org/TR/skos-reference/#concepts)
+    * `id` is the permanent identifier URL of the period
+    * `name` is a descriptive label for the period
+    * `type` asserts that the period is a [`skos:Concept`](https://www.w3.org/TR/skos-reference/#concepts)
     * `score` can be used for ranking matches by "closeness," lower
       numbers indicate closer matches
     * `match` will be `true` if and only if there was just a single match
@@ -191,7 +191,7 @@ period definitions.
             "type": [
               {
                 "id": "http://www.w3.org/2004/02/skos/core#Concept",
-                "name": "Period definition"
+                "name": "Period"
               }
             ],
             "score": 0,
@@ -207,7 +207,7 @@ period definitions.
             "type": [
               {
                 "id": "http://www.w3.org/2004/02/skos/core#Concept",
-                "name": "Period definition"
+                "name": "Period"
               }
             ],
             "score": 0,
@@ -223,7 +223,7 @@ period definitions.
             "type": [
               {
                 "id": "http://www.w3.org/2004/02/skos/core#Concept",
-                "name": "Period definition"
+                "name": "Period"
               }
             ],
             "score": 0,
@@ -375,11 +375,11 @@ can be specified when reconciling period names.
 
 
 ----
-### Suggest period definitions
+### Suggest periods
 
-Given a specified sequence of characters, fetch a list of period
-definitions with labels containing that sequence. Intended to be used
-for auto-suggesting input fields.
+Given a specified sequence of characters, fetch a list of periods
+with labels containing that sequence. Intended to be used for
+auto-suggesting input fields.
 
 * __URL path__
 
@@ -419,7 +419,7 @@ for auto-suggesting input fields.
           "type": [
             {
               "id": "http://www.w3.org/2004/02/skos/core#Concept",
-              "name": "Period definition"
+              "name": "Period"
             }
           ],
           "score": 0,
@@ -431,7 +431,7 @@ for auto-suggesting input fields.
           "type": [
             {
               "id": "http://www.w3.org/2004/02/skos/core#Concept",
-              "name": "Period definition"
+              "name": "Period"
             }
           ],
           "score": 0,
@@ -449,7 +449,7 @@ for auto-suggesting input fields.
 
 
 ----
-### Preview period definition details
+### Preview period details
 
 * __URL path__
 
@@ -463,7 +463,7 @@ for auto-suggesting input fields.
 
   _Required_ 
   
-  `id=[period definition identifier]`
+  `id=[period identifier]`
 
   _Optional_
   
@@ -514,7 +514,7 @@ for auto-suggesting input fields.
              href="http://n2t.net/ark:/99152/p0fp7wv">Merrick Lex Berman. CHGIS: Major Chinese Periods Chronology. 2015.</a>
         </p>
         <p>
-          <i>contains 52 period definitions</i>
+          <i>contains 52 periods</i>
         </p>
       </dd>
 
@@ -548,9 +548,9 @@ for auto-suggesting input fields.
     __Content__
     
     A `404` error indicates that the value of `id` does not identify
-    a period definition:
+    a period:
     
-    `'foo' is not a period definition URI`
+    `'foo' is not a period URI`
     
 * __Sample Call:__
 

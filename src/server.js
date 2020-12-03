@@ -87,7 +87,7 @@ module.exports = ({periods, sources}) => {
         sendHTML(`<!doctype html><html><body bgcolor="white">${html}`, res)
       }
     } else {
-      sendError(404, `'${id}' is not a period definition URI`, res)
+      sendError(404, `'${id}' is not a period URI`, res)
     }
   }
 

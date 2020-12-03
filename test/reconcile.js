@@ -31,7 +31,7 @@ test('can limit results', t => {
       , name: 'Akkadian [Mesopotamia, Iraq, Turkey, Syria: -2349 to -2149]'
       , score: 0
       , type: [ { id: 'http://www.w3.org/2004/02/skos/core#Concept'
-                , name: 'Period definition' } ]
+                , name: 'Period' } ]
       }
     ]
   )
